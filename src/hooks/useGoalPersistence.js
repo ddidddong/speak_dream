@@ -1,13 +1,31 @@
 import { useState, useEffect } from 'react';
 
-const STORAGE_KEY = 'goal_100_data';
+const STORAGE_KEY = 'goal_100_data_v2';
 
 export default function useGoalPersistence() {
   const [data, setData] = useState(() => {
     const saved = localStorage.getItem(STORAGE_KEY);
-    return saved ? JSON.parse(saved) : {
+    const today = new Date().toISOString().split('T')[0];
+    
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      // Reset daily count if it's a new day (but keep record in stats)
+      const lastSessionDate = parsed.lastSessionDate || today;
+      if (lastSessionDate !== today) {
+        return {
+          ...parsed,
+          count: 0,
+          lastSessionDate: today
+        };
+      }
+      return parsed;
+    }
+
+    return {
       goal: '',
       count: 0,
+      lastSessionDate: today,
+      stats: {}, // { "2024-03-12": 100 }
       history: []
     };
   });
@@ -21,31 +39,40 @@ export default function useGoalPersistence() {
   };
 
   const incrementCount = () => {
+    const today = new Date().toISOString().split('T')[0];
     setData(prev => {
       const newCount = prev.count + 1;
-      if (newCount >= 100) {
-        // Achievement unlocked!
-        const newHistory = [
+      const newStats = { ...prev.stats, [today]: newCount };
+      
+      let newHistory = prev.history;
+      if (newCount === 100) {
+        newHistory = [
           { date: new Date().toISOString(), goal: prev.goal },
           ...prev.history
-        ].slice(0, 50); // Keep last 50
-        return { ...prev, count: 0, history: newHistory };
+        ].slice(0, 50);
       }
-      return { ...prev, count: newCount };
+      
+      return { 
+        ...prev, 
+        count: newCount, 
+        stats: newStats,
+        history: newHistory 
+      };
     });
   };
 
   const resetGoal = () => {
-    setData({
+    setData(prev => ({
+      ...prev,
       goal: '',
-      count: 0,
-      history: data.history
-    });
+      count: 0
+    }));
   };
 
   return {
     goal: data.goal,
     count: data.count,
+    stats: data.stats,
     history: data.history,
     setGoal,
     incrementCount,
