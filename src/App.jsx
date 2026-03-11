@@ -53,6 +53,7 @@ function App() {
         ) : (
           <MyPage 
             goal={goal} 
+            count={count}
             stats={stats} 
             history={history} 
             onReset={() => {
