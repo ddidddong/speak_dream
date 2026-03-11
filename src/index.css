@@ -4,19 +4,19 @@
   --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
   
   --bg-primary: #ffffff;
-  --bg-secondary: #f8fafc;
-  --text-primary: #0f172a;
-  --text-secondary: #64748b;
-  --accent: #4f46e5;
-  --accent-light: #eef2ff;
-  --accent-hover: #4338ca;
-  --border: #e2e8f0;
+  --bg-secondary: #faf9f8;
+  --text-primary: #202020;
+  --text-secondary: #666666;
+  --accent: #de483a; /* Todoist Red */
+  --accent-light: #fbeae9;
+  --accent-hover: #c3392c;
+  --border: #eeeeee;
   --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-  --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
   --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
   
-  --radius-md: 0.75rem;
-  --radius-lg: 1rem;
+  --radius-md: 10px;
+  --radius-lg: 16px;
 
   font-family: var(--font-sans);
   line-height: 1.5;
@@ -34,6 +34,7 @@
 
 * {
   box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
 }
 
 body {
@@ -43,6 +44,7 @@ body {
   display: flex;
   flex-direction: column;
   background-color: var(--bg-secondary);
+  overscroll-behavior-y: none;
 }
 
 #root {
@@ -56,6 +58,7 @@ h1, h2, h3, h4 {
   margin: 0;
   color: var(--text-primary);
   font-weight: 700;
+  letter-spacing: -0.01em;
 }
 
 p {
@@ -70,29 +73,67 @@ input, button, textarea {
 
 button {
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+button:active {
+  transform: scale(0.98);
 }
 
 .card {
   background: var(--bg-primary);
   border-radius: var(--radius-lg);
-  padding: 2rem;
+  padding: 1.5rem;
   border: 1px solid var(--border);
   box-shadow: var(--shadow);
 }
 
 .container {
-  max-width: 800px;
+  max-width: 600px;
   margin: 0 auto;
-  padding: 2rem 1.5rem;
+  padding: 1rem 1rem 5rem 1rem; /* Space for bottom nav */
   width: 100%;
 }
 
 @media (max-width: 640px) {
   .container {
-    padding: 1.5rem 1rem;
+    padding: 0 0 5rem 0;
   }
   .card {
-    padding: 1.5rem;
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+    padding: 1.25rem 1rem;
   }
+  .no-mobile-radius {
+    border-radius: 0 !important;
+  }
+}
+
+/* Specific UI adjustments for Todoist look */
+.btn-primary {
+  background-color: var(--accent);
+  color: white;
+  border: none;
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+}
+
+.btn-primary:hover {
+  background-color: var(--accent-hover);
+}
+
+.input-field {
+  width: 100%;
+  padding: 1rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  outline: none;
+  transition: border-color 0.2s;
+  background-color: white;
+}
+
+.input-field:focus {
+  border-color: var(--accent);
 }

@@ -11,47 +11,16 @@ function App() {
 
   return (
     <div className="container">
-      <header style={{ textAlign: 'center', marginBottom: '2rem', marginTop: '1rem' }}>
-        <h1 style={{ fontSize: '2.5rem', fontWeight: 800, color: 'var(--accent)', letterSpacing: '-0.025em' }}>
+      <header style={{ padding: '2rem 1rem 1rem 1rem', display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+        <h1 style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--accent)', letterSpacing: '-0.025em' }}>
           Goal 100
         </h1>
-        <p style={{ marginTop: '0.5rem', fontWeight: 500 }}>
-          목표를 무의식에 새기는 100번의 반복
+        <p style={{ marginTop: '0.25rem', fontWeight: 500, fontSize: '0.875rem' }}>
+          무의식에 새기는 확언의 힘
         </p>
       </header>
 
-      <nav style={{ display: 'flex', justifyContent: 'center', gap: '1rem', marginBottom: '2rem' }}>
-        <button 
-          onClick={() => setView('home')}
-          style={{ 
-            padding: '0.5rem 1.5rem', 
-            borderRadius: '2rem', 
-            border: 'none',
-            backgroundColor: view === 'home' ? 'var(--accent)' : 'var(--bg-primary)',
-            color: view === 'home' ? 'white' : 'var(--text-secondary)',
-            fontWeight: 600,
-            boxShadow: 'var(--shadow-sm)'
-          }}
-        >
-          쓰기
-        </button>
-        <button 
-          onClick={() => setView('mypage')}
-          style={{ 
-            padding: '0.5rem 1.5rem', 
-            borderRadius: '2rem', 
-            border: 'none',
-            backgroundColor: view === 'mypage' ? 'var(--accent)' : 'var(--bg-primary)',
-            color: view === 'mypage' ? 'white' : 'var(--text-secondary)',
-            fontWeight: 600,
-            boxShadow: 'var(--shadow-sm)'
-          }}
-        >
-          마이페이지
-        </button>
-      </nav>
-
-      <main>
+      <main style={{ padding: '0 0.5rem' }}>
         {view === 'home' ? (
           <>
             {!goal ? (
@@ -79,8 +48,56 @@ function App() {
         )}
       </main>
 
-      <footer style={{ marginTop: '5rem', paddingBottom: '3rem', textAlign: 'center', borderTop: '1px solid var(--border)', paddingTop: '2rem' }}>
-        <p style={{ fontSize: '0.875rem' }}>© 2026 Goal 100. 미래를 만드는 가장 확실한 방법.</p>
+      {/* Bottom Navigation */}
+      <nav style={{ 
+        position: 'fixed', 
+        bottom: 0, 
+        left: 0, 
+        right: 0, 
+        backgroundColor: 'white', 
+        display: 'flex', 
+        justifyContent: 'space-around', 
+        padding: '0.75rem 0',
+        borderTop: '1px solid var(--border)',
+        zIndex: 100,
+        boxShadow: '0 -2px 10px rgba(0,0,0,0.03)'
+      }}>
+        <button 
+          onClick={() => setView('home')}
+          style={{ 
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            background: 'none',
+            border: 'none',
+            color: view === 'home' ? 'var(--accent)' : 'var(--text-secondary)',
+            fontWeight: 600,
+            fontSize: '0.75rem'
+          }}
+        >
+          <span style={{ fontSize: '1.25rem', marginBottom: '0.25rem' }}>✍️</span>
+          쓰기/녹음
+        </button>
+        <button 
+          onClick={() => setView('mypage')}
+          style={{ 
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            background: 'none',
+            border: 'none',
+            color: view === 'mypage' ? 'var(--accent)' : 'var(--text-secondary)',
+            fontWeight: 600,
+            fontSize: '0.75rem'
+          }}
+        >
+          <span style={{ fontSize: '1.25rem', marginBottom: '0.25rem' }}>📊</span>
+          마이페이지
+        </button>
+      </nav>
+
+      <footer style={{ marginTop: '3rem', padding: '2rem 1rem', textAlign: 'center', opacity: 0.5 }}>
+        <p style={{ fontSize: '0.75rem' }}>© 2026 Goal 100. Always keep going.</p>
       </footer>
     </div>
   );
