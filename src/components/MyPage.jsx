@@ -1,5 +1,5 @@
 import React from 'react';
-import CalendarTracker from './CalendarTracker';
+import MonthlyCalendar from './MonthlyCalendar';
 
 export default function MyPage({ goal, stats, history, onReset }) {
   const completionCount = Object.values(stats).filter(count => count >= 100).length;
@@ -8,19 +8,19 @@ export default function MyPage({ goal, stats, history, onReset }) {
   return (
     <div style={{ display: 'grid', gap: '0.75rem' }}>
       <section className="card no-mobile-radius">
-        <h3 style={{ fontSize: '1.125rem', marginBottom: '1.25rem' }}>나의 기록</h3>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
+        <h3 style={{ fontSize: '1.25rem', marginBottom: '1.25rem', fontFamily: 'var(--font-brand)', fontWeight: 400 }}>나의 습관 캘린더</h3>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem', marginBottom: '1rem' }}>
           <div style={{ padding: '1rem', backgroundColor: 'var(--accent-light)', borderRadius: 'var(--radius-md)', textAlign: 'center' }}>
             <p style={{ margin: 0, fontSize: '0.75rem', color: 'var(--accent)', fontWeight: 600 }}>완료한 날</p>
-            <p style={{ margin: 0, fontSize: '1.75rem', fontWeight: 800, color: 'var(--accent)' }}>{completionCount}</p>
+            <p style={{ margin: 0, fontSize: '1.75rem', fontWeight: 800, color: 'var(--accent)', fontFamily: 'var(--font-brand)' }}>{completionCount}</p>
           </div>
           <div style={{ padding: '1rem', backgroundColor: 'var(--bg-secondary)', borderRadius: 'var(--radius-md)', textAlign: 'center', border: '1px solid var(--border)' }}>
             <p style={{ margin: 0, fontSize: '0.75rem', color: 'var(--text-secondary)', fontWeight: 600 }}>총 반복</p>
-            <p style={{ margin: 0, fontSize: '1.75rem', fontWeight: 800, color: 'var(--text-primary)' }}>{totalReps}</p>
+            <p style={{ margin: 0, fontSize: '1.75rem', fontWeight: 800, color: 'var(--text-primary)', fontFamily: 'var(--font-brand)' }}>{totalReps}</p>
           </div>
         </div>
         
-        <CalendarTracker stats={stats} />
+        <MonthlyCalendar stats={stats} />
       </section>
 
       <section className="card no-mobile-radius">
