@@ -4,13 +4,22 @@ import GoalGenerator from './components/GoalGenerator';
 import WorkArea from './components/WorkArea';
 import MyPage from './components/MyPage';
 import Info from './components/Info';
+import LandingPage from './components/LandingPage';
 
 function App() {
   const { goal, count, stats, history, setGoal, incrementCount, resetGoal } = useGoalPersistence();
   const [view, setView] = useState('home'); // 'home' or 'mypage'
+  const [hasStarted, setHasStarted] = useState(() => {
+    // If there's already a goal, skip landing
+    return !!goal;
+  });
+
+  if (!hasStarted && !goal) {
+    return <LandingPage onStart={() => setHasStarted(true)} />;
+  }
 
   return (
-    <div className="container">
+    <div className="container" style={{ animation: 'fadeIn 0.5s ease-out' }}>
       <header style={{ padding: '2rem 1rem 1rem 1rem', display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
         <h1 style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--accent)', letterSpacing: '-0.025em' }}>
           Goal 100
@@ -99,6 +108,13 @@ function App() {
       <footer style={{ marginTop: '3rem', padding: '2rem 1rem', textAlign: 'center', opacity: 0.5 }}>
         <p style={{ fontSize: '0.75rem' }}>© 2026 Goal 100. Always keep going.</p>
       </footer>
+
+      <style>{`
+        @keyframes fadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+      `}</style>
     </div>
   );
 }
