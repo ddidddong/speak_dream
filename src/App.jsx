@@ -21,11 +21,17 @@ function App() {
   return (
     <div className="container" style={{ animation: 'fadeIn 0.5s ease-out' }}>
       <header style={{ padding: '2rem 1rem 1rem 1rem', display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
-        <h1 style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--accent)', letterSpacing: '-0.025em' }}>
-          Goal 100
+        <h1 style={{ 
+          fontSize: '2rem', 
+          fontWeight: 400, 
+          color: 'var(--accent)', 
+          fontFamily: 'var(--font-brand)',
+          letterSpacing: '0.05em' 
+        }}>
+          SpeakDream
         </h1>
-        <p style={{ marginTop: '0.25rem', fontWeight: 500, fontSize: '0.875rem' }}>
-          무의식에 새기는 확언의 힘
+        <p style={{ marginTop: '0.25rem', fontWeight: 600, fontSize: '0.875rem' }}>
+          스픽드림: 무의식에 새기는 확언의 힘
         </p>
       </header>
 
@@ -106,7 +112,7 @@ function App() {
       </nav>
 
       <footer style={{ marginTop: '3rem', padding: '2rem 1rem', textAlign: 'center', opacity: 0.5 }}>
-        <p style={{ fontSize: '0.75rem' }}>© 2026 Goal 100. Always keep going.</p>
+        <p style={{ fontSize: '0.75rem' }}>© 2026 SpeakDream. Always keep going.</p>
       </footer>
 
       <style>{`

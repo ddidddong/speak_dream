@@ -13,10 +13,10 @@ export default function LandingPage({ onStart }) {
       textAlign: 'center',
       animation: 'fadeIn 0.8s ease-out'
     }}>
-      <div style={{ maxWidth: '400px', width: '100%', marginBottom: '3rem' }}>
+      <div style={{ maxWidth: '400px', width: '100%', marginBottom: '2rem' }}>
         <img 
           src="./landing-hero.png" 
-          alt="Goal 100 Hero" 
+          alt="SpeakDream Hero" 
           style={{ 
             width: '100%', 
             height: 'auto', 
@@ -27,14 +27,16 @@ export default function LandingPage({ onStart }) {
       </div>
 
       <h1 style={{ 
-        fontSize: '2rem', 
+        fontSize: '2.5rem', 
         lineHeight: 1.2, 
         marginBottom: '1rem',
         wordBreak: 'keep-all',
-        color: 'var(--text-primary)'
+        color: 'var(--text-primary)',
+        fontFamily: 'var(--font-brand)',
+        fontWeight: 400
       }}>
-        무의식에 목표를 새기는<br/>
-        <span style={{ color: 'var(--accent)' }}>가장 확실한 방법</span>
+        SpeakDream<br/>
+        <span style={{ fontSize: '1.5rem', color: 'var(--accent)', display: 'block', marginTop: '0.5rem' }}>스픽드림: 꿈을 현실로</span>
       </h1>
       
       <p style={{ 
