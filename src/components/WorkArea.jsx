@@ -15,15 +15,25 @@ export default function WorkArea({ goal, count, onIncrement, onReset }) {
       recognitionRef.current.continuous = false;
       recognitionRef.current.interimResults = false;
 
+      recognitionRef.current.onstart = () => {
+        setIsRecording(true);
+        setFeedback('듣고 있습니다... 말씀해 주세요.');
+      };
+
       recognitionRef.current.onresult = (event) => {
         const transcript = event.results[0][0].transcript;
         processResult(transcript);
         setIsRecording(false);
       };
 
-      recognitionRef.current.onerror = () => {
+      recognitionRef.current.onerror = (event) => {
         setIsRecording(false);
-        setFeedback('음성 인식 중 오류가 발생했습니다.');
+        console.error('Speech recognition error:', event.error);
+        if (event.error === 'not-allowed') {
+          setFeedback('마이크 권한이 필요합니다.');
+        } else {
+          setFeedback('음성 인식 중 오류가 발생했습니다.');
+        }
       };
 
       recognitionRef.current.onend = () => {
@@ -33,13 +43,16 @@ export default function WorkArea({ goal, count, onIncrement, onReset }) {
   }, []);
 
   const processResult = (text) => {
-    // Basic normalization for comparison
-    const normalizedGoal = goal.replace(/\s/g, '').replace(/[.?!,]/g, '');
-    const normalizedInput = text.replace(/\s/g, '').replace(/[.?!,]/g, '');
+    // Robust normalization for Korean comparison
+    // Removes all whitespace, special characters, and converts to comparable string
+    const normalize = (str) => str.replace(/\s+/g, '').replace(/[.?!,]/g, '').trim();
+    
+    const normalizedGoal = normalize(goal);
+    const normalizedInput = normalize(text);
 
     if (normalizedInput === normalizedGoal) {
       onIncrement();
-      setFeedback('성공! 잘하셨어요.');
+      setFeedback('성공! 기록되었습니다.');
       setTimeout(() => setFeedback(''), 1500);
     } else {
       setFeedback(`다시 말씀해 보세요: "${text}"`);
@@ -66,12 +79,15 @@ export default function WorkArea({ goal, count, onIncrement, onReset }) {
       recognitionRef.current?.stop();
     } else {
       if (!recognitionRef.current) {
-        alert('이 브라우저는 음성 인식을 지원하지 않습니다.');
+        alert('이 브라우저는 음성 인식을 지원하지 않습니다. 크롬 브라우저 사용을 권장합니다.');
         return;
       }
-      setFeedback('듣고 있습니다...');
-      recognitionRef.current.start();
-      setIsRecording(true);
+      try {
+        recognitionRef.current.start();
+      } catch (err) {
+        console.error('Failed to start recognition:', err);
+        recognitionRef.current.stop();
+      }
     }
   };
 
@@ -112,6 +128,7 @@ export default function WorkArea({ goal, count, onIncrement, onReset }) {
           <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '1rem' }}>
             <button
               onClick={toggleRecording}
+              className={isRecording ? 'pulse' : ''}
               style={{
                 width: '72px',
                 height: '72px',
@@ -123,15 +140,18 @@ export default function WorkArea({ goal, count, onIncrement, onReset }) {
                 justifyContent: 'center',
                 color: isRecording ? 'white' : 'var(--accent)',
                 fontSize: '1.5rem',
-                boxShadow: isRecording ? '0 0 15px var(--accent)' : 'none',
-                transition: 'all 0.3s ease'
+                boxShadow: isRecording ? '0 0 20px rgba(222, 72, 58, 0.4)' : 'none',
+                transition: 'all 0.3s ease',
+                position: 'relative'
               }}
             >
-              {isRecording ? '●' : '🎤'}
+              <span style={{ position: 'relative', zIndex: 1 }}>
+                {isRecording ? '■' : '🎤'}
+              </span>
             </button>
           </div>
 
-          <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)' }}>또는 아래에 직접 입력하세요</p>
+          <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)' }}>말하기 또는 아래에 직접 입력</p>
 
           <input 
             ref={inputRef}
@@ -168,6 +188,17 @@ export default function WorkArea({ goal, count, onIncrement, onReset }) {
           </button>
         </div>
       </div>
+
+      <style>{`
+        @keyframes pulse {
+          0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(222, 72, 58, 0.4); }
+          70% { transform: scale(1.05); box-shadow: 0 0 0 15px rgba(222, 72, 58, 0); }
+          100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(222, 72, 58, 0); }
+        }
+        .pulse {
+          animation: pulse 1.5s infinite;
+        }
+      `}</style>
     </div>
   );
 }
