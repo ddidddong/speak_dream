@@ -3,18 +3,24 @@ import React, { useState } from 'react';
 export default function MonthlyCalendar({ stats }) {
   const [currentDate, setCurrentDate] = useState(new Date());
 
-  const year = currentDate.getFullYear();
-  const month = currentDate.getMonth();
+  const currentYear = currentDate.getFullYear();
+  const currentMonth = currentDate.getMonth();
 
-  const daysInMonth = new Date(year, month + 1, 0).getDate();
-  const firstDayOfMonth = new Date(year, month, 1).getDay();
+  const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+  const firstDayOfMonth = new Date(currentYear, currentMonth, 1).getDay();
 
-  const prevMonth = () => {
-    setCurrentDate(new Date(year, month - 1, 1));
+  const years = [];
+  const nowYear = new Date().getFullYear();
+  for (let y = nowYear - 2; y <= nowYear + 2; y++) {
+    years.push(y);
+  }
+
+  const handleYearChange = (e) => {
+    setCurrentDate(new Date(parseInt(e.target.value), currentMonth, 1));
   };
 
-  const nextMonth = () => {
-    setCurrentDate(new Date(year, month + 1, 1));
+  const handleMonthChange = (e) => {
+    setCurrentDate(new Date(currentYear, parseInt(e.target.value), 1));
   };
 
   const monthNames = [
@@ -22,24 +28,33 @@ export default function MonthlyCalendar({ stats }) {
     "7월", "8월", "9월", "10월", "11월", "12월"
   ];
 
+  // Calculate Monthly Aggregate
+  const monthPrefix = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}`;
+  const monthlyTotal = Object.entries(stats)
+    .filter(([date]) => date.startsWith(monthPrefix))
+    .reduce((sum, [, count]) => sum + count, 0);
+
+  // Calculate Yearly Aggregate
+  const yearlyTotal = Object.entries(stats)
+    .filter(([date]) => date.startsWith(`${currentYear}-`))
+    .reduce((sum, [, count]) => sum + count, 0);
+
   const getIntensity = (day) => {
-    const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+    const dateStr = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
     const count = stats[dateStr] || 0;
     if (count >= 100) return 'var(--accent)';
-    if (count > 50) return '#f87171'; // Lighter red
-    if (count > 0) return '#fca5a5'; // Pale red
+    if (count > 50) return '#f87171';
+    if (count > 0) return '#fca5a5';
     return 'var(--bg-secondary)';
   };
 
   const days = [];
-  // Empty slots for the first week
   for (let i = 0; i < firstDayOfMonth; i++) {
     days.push(<div key={`empty-${i}`} style={{ aspectRatio: '1' }} />);
   }
 
-  // Days of the month
   for (let d = 1; d <= daysInMonth; d++) {
-    const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+    const dateStr = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
     const count = stats[dateStr] || 0;
     const isToday = new Date().toISOString().split('T')[0] === dateStr;
 
@@ -58,29 +73,69 @@ export default function MonthlyCalendar({ stats }) {
           fontSize: '0.875rem',
           fontWeight: 600,
           color: count >= 100 ? 'white' : 'var(--text-primary)',
-          cursor: 'default',
+          cursor: 'pointer',
           position: 'relative',
-          transition: 'transform 0.2s ease'
         }}
         title={`${dateStr}: ${count}회`}
       >
         {d}
         {count >= 100 && (
-          <span style={{ fontSize: '0.625rem', marginTop: '2px' }}>⭐</span>
+          <span style={{ fontSize: '0.5rem', marginTop: '2px' }}>⭐</span>
         )}
       </div>
     );
   }
 
   return (
-    <div style={{ marginTop: '1.5rem' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-        <h4 style={{ fontSize: '1.125rem', fontWeight: 600, fontFamily: 'var(--font-brand)' }}>
-          {year}년 {monthNames[month]}
-        </h4>
-        <div style={{ display: 'flex', gap: '0.5rem' }}>
-          <button onClick={prevMonth} className="btn-nav">◀</button>
-          <button onClick={nextMonth} className="btn-nav">▶</button>
+    <div style={{ marginTop: '0.5rem' }}>
+      {/* Aggregate Stats Section */}
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem', marginBottom: '1.5rem' }}>
+        <div style={{ padding: '0.75rem', backgroundColor: 'var(--bg-secondary)', borderRadius: 'var(--radius-md)', border: '1px solid var(--border)', textAlign: 'center' }}>
+          <p style={{ margin: 0, fontSize: '0.7rem', color: 'var(--text-secondary)', fontWeight: 600 }}>{currentMonth + 1}월 합계</p>
+          <p style={{ margin: 0, fontSize: '1.25rem', fontWeight: 800, color: 'var(--text-primary)', fontFamily: 'var(--font-brand)' }}>{monthlyTotal}회</p>
+        </div>
+        <div style={{ padding: '0.75rem', backgroundColor: 'var(--bg-secondary)', borderRadius: 'var(--radius-md)', border: '1px solid var(--border)', textAlign: 'center' }}>
+          <p style={{ margin: 0, fontSize: '0.7rem', color: 'var(--text-secondary)', fontWeight: 600 }}>{currentYear}년 전체</p>
+          <p style={{ margin: 0, fontSize: '1.25rem', fontWeight: 800, color: 'var(--text-primary)', fontFamily: 'var(--font-brand)' }}>{yearlyTotal}회</p>
+        </div>
+      </div>
+
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem' }}>
+        <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+          <select 
+            value={currentYear} 
+            onChange={handleYearChange}
+            style={{ 
+              padding: '0.4rem 0.5rem', 
+              borderRadius: '0.5rem', 
+              border: '1px solid var(--border)', 
+              fontSize: '0.9rem', 
+              fontWeight: 600, 
+              fontFamily: 'var(--font-brand)',
+              backgroundColor: 'white'
+            }}
+          >
+            {years.map(y => <option key={y} value={y}>{y}년</option>)}
+          </select>
+          <select 
+            value={currentMonth} 
+            onChange={handleMonthChange}
+            style={{ 
+              padding: '0.4rem 0.5rem', 
+              borderRadius: '0.5rem', 
+              border: '1px solid var(--border)', 
+              fontSize: '0.9rem', 
+              fontWeight: 600, 
+              fontFamily: 'var(--font-brand)',
+              backgroundColor: 'white'
+            }}
+          >
+            {monthNames.map((m, i) => <option key={i} value={i}>{m}</option>)}
+          </select>
+        </div>
+        <div style={{ display: 'flex', gap: '0.4rem' }}>
+          <button onClick={() => setCurrentDate(new Date(currentYear, currentMonth - 1, 1))} className="btn-nav">◀</button>
+          <button onClick={() => setCurrentDate(new Date(currentYear, currentMonth + 1, 1))} className="btn-nav">▶</button>
         </div>
       </div>
 
@@ -90,22 +145,22 @@ export default function MonthlyCalendar({ stats }) {
         gap: '0.4rem',
       }}>
         {['일', '월', '화', '수', '목', '금', '토'].map(d => (
-          <div key={d} style={{ textAlign: 'center', fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-secondary)', paddingBottom: '0.5rem' }}>
+          <div key={d} style={{ textAlign: 'center', fontSize: '0.7rem', fontWeight: 700, color: 'var(--text-secondary)', paddingBottom: '0.25rem' }}>
             {d}
           </div>
         ))}
         {days}
       </div>
 
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem', marginTop: '1.5rem', fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
-          <div style={{ width: '0.75rem', height: '0.75rem', backgroundColor: 'var(--bg-secondary)', border: '1px solid var(--border)', borderRadius: '0.125rem' }} /> 미기록
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.6rem', marginTop: '1.25rem', fontSize: '0.7rem', color: 'var(--text-secondary)' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.2rem' }}>
+          <div style={{ width: '0.6rem', height: '0.6rem', backgroundColor: 'var(--bg-secondary)', border: '1px solid var(--border)', borderRadius: '0.125rem' }} /> 미기록
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
-          <div style={{ width: '0.75rem', height: '0.75rem', backgroundColor: '#fca5a5', border: '1px solid var(--border)', borderRadius: '0.125rem' }} /> 시도중
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.2rem' }}>
+          <div style={{ width: '0.6rem', height: '0.6rem', backgroundColor: '#fca5a5', border: '1px solid var(--border)', borderRadius: '0.125rem' }} /> 진행중
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
-          <div style={{ width: '0.75rem', height: '0.75rem', backgroundColor: 'var(--accent)', border: '1px solid var(--border)', borderRadius: '0.125rem' }} /> 100회 완료
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.2rem' }}>
+          <div style={{ width: '0.6rem', height: '0.6rem', backgroundColor: 'var(--accent)', border: '1px solid var(--border)', borderRadius: '0.125rem' }} /> 완수
         </div>
       </div>
 
@@ -120,6 +175,7 @@ export default function MonthlyCalendar({ stats }) {
           display: flex;
           align-items: center;
           justify-content: center;
+          cursor: pointer;
         }
         .btn-nav:hover {
           background: var(--bg-secondary);
