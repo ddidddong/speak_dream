@@ -2,14 +2,20 @@ import React, { useState } from 'react';
 
 export default function GoalGenerator({ onSave }) {
   const [isFreeMode, setIsFreeMode] = useState(false);
-  const [year, setYear] = useState('');
+  const [targetDate, setTargetDate] = useState('');
   const [goal, setGoal] = useState('');
   const [verb, setVerb] = useState('');
   const [freeSentence, setFreeSentence] = useState('');
 
+  const formatDate = (dateStr) => {
+    if (!dateStr) return '____년 __월 __일';
+    const d = new Date(dateStr);
+    return `${d.getFullYear()}년 ${d.getMonth() + 1}월 ${d.getDate()}일`;
+  };
+
   const generatedSentence = isFreeMode 
     ? freeSentence || '자유롭게 목표 문장을 입력해주세요.'
-    : `나는 ${year || '____'}년에 ${goal || '____'}${goal.endsWith('을') || goal.endsWith('를') ? '' : '을/를'} ${verb || '____'}하였다.`;
+    : `나는 ${formatDate(targetDate)}에 ${goal || '____'}${goal.endsWith('을') || goal.endsWith('를') ? '' : '을/를'} ${verb || '____'}하였다.`;
 
   const handleSave = () => {
     if (isFreeMode) {
@@ -19,7 +25,7 @@ export default function GoalGenerator({ onSave }) {
       }
       onSave(freeSentence.trim());
     } else {
-      if (!year || !goal || !verb) {
+      if (!targetDate || !goal || !verb) {
         alert('모든 필드를 입력해주세요.');
         return;
       }
@@ -28,7 +34,7 @@ export default function GoalGenerator({ onSave }) {
       const hasBatchim = (lastChar - 0xAC00) % 28 !== 0;
       particle = hasBatchim ? '을' : '를';
       
-      const finalSentence = `나는 ${year}년에 ${goal}${particle} ${verb}하였다.`;
+      const finalSentence = `나는 ${formatDate(targetDate)}에 ${goal}${particle} ${verb}하였다.`;
       onSave(finalSentence);
     }
   };
@@ -57,13 +63,12 @@ export default function GoalGenerator({ onSave }) {
         {!isFreeMode ? (
           <>
             <div>
-              <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.875rem', fontWeight: 500 }}>목표 연도</label>
+              <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.875rem', fontWeight: 500 }}>목표 달성 날짜</label>
               <input 
-                type="text" 
-                placeholder="예: 2026" 
-                value={year}
-                onChange={(e) => setYear(e.target.value)}
-                style={{ width: '100%', padding: '0.75rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--border)', outline: 'none' }}
+                type="date" 
+                value={targetDate}
+                onChange={(e) => setTargetDate(e.target.value)}
+                style={{ width: '100%', padding: '0.75rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--border)', outline: 'none', backgroundColor: 'white' }}
               />
             </div>
             <div>

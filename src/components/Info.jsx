@@ -10,11 +10,11 @@ export default function Info() {
         </p>
         <div style={{ padding: '1.5rem', backgroundColor: 'var(--bg-secondary)', borderRadius: 'var(--radius-md)', border: '1px dashed var(--border)' }}>
           <p style={{ margin: 0, fontWeight: 700, fontSize: '1.125rem', color: 'var(--accent)' }}>
-            나는 + [연도] + [목표] + [과거형 문장]
+            나는 + [날짜] + [목표] + [과거형 문장]
           </p>
         </div>
         <p style={{ marginTop: '1.5rem', fontSize: '0.875rem' }}>
-          예: "나는 2026년에 연수입 10억을 달성하였다."
+          예: "나는 2026년 12월 31일에 연수입 10억을 달성하였다."
         </p>
       </section>
 
