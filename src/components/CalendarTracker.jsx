@@ -12,8 +12,8 @@ export default function CalendarTracker({ stats }) {
   const getIntensity = (day) => {
     const count = stats[day] || 0;
     if (count >= 100) return 'var(--accent)';
-    if (count > 50) return '#818cf8';
-    if (count > 0) return '#c7d2fe';
+    if (count > 5) return '#f87171'; // Lighter red
+    if (count > 0) return '#fca5a5'; // Pale red
     return 'var(--bg-secondary)';
   };
 
