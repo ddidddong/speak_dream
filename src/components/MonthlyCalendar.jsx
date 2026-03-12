@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 
 export default function MonthlyCalendar({ stats }) {
-  const [currentDate, setCurrentDate] = useState(new Date());
+  const [showMonthPicker, setShowMonthPicker] = useState(false);
+  const [showYearPicker, setShowYearPicker] = useState(false);
 
   const currentYear = currentDate.getFullYear();
   const currentMonth = currentDate.getMonth();
@@ -11,16 +12,18 @@ export default function MonthlyCalendar({ stats }) {
 
   const years = [];
   const nowYear = new Date().getFullYear();
-  for (let y = nowYear - 2; y <= nowYear + 2; y++) {
+  for (let y = nowYear - 5; y <= nowYear + 5; y++) {
     years.push(y);
   }
 
-  const handleYearChange = (e) => {
-    setCurrentDate(new Date(parseInt(e.target.value), currentMonth, 1));
+  const handleYearSelect = (year) => {
+    setCurrentDate(new Date(year, currentMonth, 1));
+    setShowYearPicker(false);
   };
 
-  const handleMonthChange = (e) => {
-    setCurrentDate(new Date(currentYear, parseInt(e.target.value), 1));
+  const handleMonthSelect = (monthIndex) => {
+    setCurrentDate(new Date(currentYear, monthIndex, 1));
+    setShowMonthPicker(false);
   };
 
   const monthNames = [
@@ -87,7 +90,7 @@ export default function MonthlyCalendar({ stats }) {
   }
 
   return (
-    <div style={{ marginTop: '0.5rem' }}>
+    <div style={{ marginTop: '0.5rem', position: 'relative' }}>
       {/* Aggregate Stats Section */}
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem', marginBottom: '1.5rem' }}>
         <div style={{ padding: '0.75rem', backgroundColor: 'var(--bg-secondary)', borderRadius: 'var(--radius-md)', border: '1px solid var(--border)', textAlign: 'center' }}>
@@ -102,36 +105,133 @@ export default function MonthlyCalendar({ stats }) {
 
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem' }}>
         <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-          <select 
-            value={currentYear} 
-            onChange={handleYearChange}
-            style={{ 
-              padding: '0.4rem 0.5rem', 
-              borderRadius: '0.5rem', 
-              border: '1px solid var(--border)', 
-              fontSize: '0.9rem', 
-              fontWeight: 600, 
-              fontFamily: 'var(--font-brand)',
-              backgroundColor: 'white'
-            }}
-          >
-            {years.map(y => <option key={y} value={y}>{y}년</option>)}
-          </select>
-          <select 
-            value={currentMonth} 
-            onChange={handleMonthChange}
-            style={{ 
-              padding: '0.4rem 0.5rem', 
-              borderRadius: '0.5rem', 
-              border: '1px solid var(--border)', 
-              fontSize: '0.9rem', 
-              fontWeight: 600, 
-              fontFamily: 'var(--font-brand)',
-              backgroundColor: 'white'
-            }}
-          >
-            {monthNames.map((m, i) => <option key={i} value={i}>{m}</option>)}
-          </select>
+          {/* Custom Year Picker Trigger */}
+          <div style={{ position: 'relative' }}>
+            <button 
+              onClick={() => { setShowYearPicker(!showYearPicker); setShowMonthPicker(false); }}
+              style={{ 
+                padding: '0.45rem 0.75rem', 
+                borderRadius: '0.625rem', 
+                border: '1px solid var(--border)', 
+                fontSize: '1rem', 
+                fontWeight: 700, 
+                fontFamily: 'var(--font-brand)',
+                backgroundColor: 'white',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.3rem',
+                color: showYearPicker ? 'var(--accent)' : 'var(--text-primary)',
+                transition: 'all 0.2s ease'
+              }}
+            >
+              {currentYear}년 <span style={{ fontSize: '0.6rem', transform: showYearPicker ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s' }}>▼</span>
+            </button>
+            {showYearPicker && (
+              <div 
+                className="picker-grid"
+                style={{ 
+                  position: 'absolute', 
+                  top: '110%', 
+                  left: 0, 
+                  backgroundColor: 'white', 
+                  border: '1px solid var(--border)', 
+                  borderRadius: '0.75rem', 
+                  boxShadow: '0 10px 25px rgba(0,0,0,0.1)', 
+                  zIndex: 200,
+                  padding: '0.75rem',
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(3, 1fr)',
+                  gap: '0.5rem',
+                  width: '200px'
+                }}
+              >
+                {years.map(y => (
+                  <button 
+                    key={y} 
+                    onClick={() => handleYearSelect(y)}
+                    style={{
+                      padding: '0.5rem',
+                      borderRadius: '0.4rem',
+                      border: y === currentYear ? '1.5px solid var(--accent)' : '1px solid #eee',
+                      backgroundColor: y === currentYear ? 'var(--accent-light)' : 'transparent',
+                      color: y === currentYear ? 'var(--accent)' : 'var(--text-primary)',
+                      fontSize: '0.875rem',
+                      fontWeight: 700,
+                      cursor: 'pointer',
+                      fontFamily: 'var(--font-brand)'
+                    }}
+                  >
+                    {y}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Custom Month Picker Trigger */}
+          <div style={{ position: 'relative' }}>
+            <button 
+              onClick={() => { setShowMonthPicker(!showMonthPicker); setShowYearPicker(false); }}
+              style={{ 
+                padding: '0.45rem 0.75rem', 
+                borderRadius: '0.625rem', 
+                border: '1px solid var(--border)', 
+                fontSize: '1rem', 
+                fontWeight: 700, 
+                fontFamily: 'var(--font-brand)',
+                backgroundColor: 'white',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.3rem',
+                color: showMonthPicker ? 'var(--accent)' : 'var(--text-primary)',
+                transition: 'all 0.2s ease'
+              }}
+            >
+              {currentMonth + 1}월 <span style={{ fontSize: '0.6rem', transform: showMonthPicker ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s' }}>▼</span>
+            </button>
+            {showMonthPicker && (
+              <div 
+                className="picker-grid"
+                style={{ 
+                  position: 'absolute', 
+                  top: '110%', 
+                  left: 0, 
+                  backgroundColor: 'white', 
+                  border: '1px solid var(--border)', 
+                  borderRadius: '0.75rem', 
+                  boxShadow: '0 10px 25px rgba(0,0,0,0.1)', 
+                  zIndex: 200,
+                  padding: '0.75rem',
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(3, 1fr)',
+                  gap: '0.5rem',
+                  width: '240px'
+                }}
+              >
+                {monthNames.map((m, i) => (
+                  <button 
+                    key={i} 
+                    onClick={() => handleMonthSelect(i)}
+                    style={{
+                      padding: '0.6rem 0',
+                      borderRadius: '0.5rem',
+                      border: i === currentMonth ? '1.5px solid var(--accent)' : '1px solid #eee',
+                      backgroundColor: i === currentMonth ? 'var(--accent-light)' : 'transparent',
+                      color: i === currentMonth ? 'var(--accent)' : 'var(--text-primary)',
+                      fontSize: '0.9rem',
+                      fontWeight: 700,
+                      cursor: 'pointer',
+                      fontFamily: 'var(--font-brand)'
+                    }}
+                  >
+                    {m}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
         <div style={{ display: 'flex', gap: '0.4rem' }}>
           <button onClick={() => setCurrentDate(new Date(currentYear, currentMonth - 1, 1))} className="btn-nav">◀</button>
