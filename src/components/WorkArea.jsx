@@ -7,6 +7,12 @@ export default function WorkArea({ goal, count, onIncrement, onReset }) {
   const inputRef = useRef(null);
   const recognitionRef = useRef(null);
 
+  const goalRef = useRef(goal);
+  
+  useEffect(() => {
+    goalRef.current = goal;
+  }, [goal]);
+
   useEffect(() => {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (SpeechRecognition) {
@@ -44,19 +50,25 @@ export default function WorkArea({ goal, count, onIncrement, onReset }) {
 
   const processResult = (text) => {
     // Robust normalization for Korean comparison
-    // Removes all whitespace, special characters, and converts to comparable string
-    const normalize = (str) => str.replace(/\s+/g, '').replace(/[.?!,]/g, '').trim();
+    const normalize = (str) => {
+      if (!str) return '';
+      return str
+        .replace(/\s+/g, '') // Remove all whitespace
+        .replace(/[.?!,]/g, '') // Remove punctuation
+        .replace(/[~`@#$%^&*()_+={}\[\]|\\:;"'<>,/]/g, '') // Remove special chars
+        .trim();
+    };
     
-    const normalizedGoal = normalize(goal);
+    const normalizedGoal = normalize(goalRef.current);
     const normalizedInput = normalize(text);
 
-    if (normalizedInput === normalizedGoal) {
+    if (normalizedInput === normalizedGoal || normalizedInput.includes(normalizedGoal) || normalizedGoal.includes(normalizedInput)) {
       onIncrement();
       setFeedback('성공! 기록되었습니다.');
       setTimeout(() => setFeedback(''), 1500);
     } else {
-      setFeedback(`다시 말씀해 보세요: "${text}"`);
-      setTimeout(() => setFeedback(''), 3000);
+      setFeedback(`인식 결과: "${text}" (다시 시도해 보세요)`);
+      setTimeout(() => setFeedback(''), 4000);
     }
   };
 

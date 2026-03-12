@@ -35,7 +35,7 @@ function App() {
         </p>
       </header>
 
-      <main style={{ padding: '0 0.5rem' }}>
+      <main>
         {view === 'home' ? (
           <>
             {!goal ? (
@@ -56,10 +56,8 @@ function App() {
             count={count}
             stats={stats} 
             history={history} 
-            onReset={() => {
-              resetGoal();
-              setView('home');
-            }} 
+            onSaveGoal={setGoal}
+            onResetGoal={resetGoal}
           />
         )}
       </main>

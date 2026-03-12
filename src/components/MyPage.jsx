@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
 import MonthlyCalendar from './MonthlyCalendar';
+import GoalGenerator from './GoalGenerator';
 
-export default function MyPage({ goal, count, stats, history, onReset }) {
+export default function MyPage({ goal, count, stats, history, onSaveGoal, onResetGoal }) {
   const [currentPage, setCurrentPage] = useState(1);
+  const [isEditing, setIsEditing] = useState(false);
   const itemsPerPage = 10;
   
   const completionCount = Object.values(stats).filter(count => count >= 100).length;
   const totalReps = Object.values(stats).reduce((acc, curr) => acc + curr, 0);
 
-  // Extract target date from goal string (e.g., "나는 2026년 12월 31일에...")
-  const dateMatch = goal.match(/(\d{4}년 \d{1,2}월 \d{1,2}일)/);
+  // Extract target date from goal string
+  const dateMatch = goal ? goal.match(/(\d{4}년 \d{1,2}월 \d{1,2}일)/) : null;
   const targetDateInfo = dateMatch ? dateMatch[0] : null;
 
   // Pagination logic
@@ -17,6 +19,35 @@ export default function MyPage({ goal, count, stats, history, onReset }) {
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentHistory = history.slice(indexOfFirstItem, indexOfLastItem);
+
+  const handleSaveGoal = (newGoal) => {
+    onSaveGoal(newGoal);
+    setIsEditing(false);
+  };
+
+  if (isEditing) {
+    return (
+      <div style={{ display: 'grid', gap: '0.75rem', paddingBottom: '5rem' }}>
+        <GoalGenerator onSave={handleSaveGoal} />
+        <button 
+          onClick={() => setIsEditing(false)}
+          style={{ 
+            width: '100%', 
+            padding: '0.75rem', 
+            backgroundColor: 'transparent', 
+            border: '1px solid var(--border)', 
+            borderRadius: 'var(--radius-md)',
+            color: 'var(--text-secondary)',
+            fontWeight: 600,
+            cursor: 'pointer',
+            fontSize: '0.875rem'
+          }}
+        >
+          취소하고 돌아가기
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div style={{ display: 'grid', gap: '0.75rem', paddingBottom: '5rem' }}>
@@ -77,7 +108,7 @@ export default function MyPage({ goal, count, stats, history, onReset }) {
 
         <div style={{ display: 'grid', gap: '0.75rem' }}>
           <button 
-            onClick={onReset}
+            onClick={() => setIsEditing(true)}
             style={{ 
               width: '100%', 
               padding: '0.85rem', 
@@ -96,7 +127,7 @@ export default function MyPage({ goal, count, stats, history, onReset }) {
           
           {goal && (
             <button 
-              onClick={onReset}
+              onClick={() => setIsEditing(true)}
               style={{ 
                 width: '100%', 
                 padding: '0.75rem', 
