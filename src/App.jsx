@@ -7,7 +7,7 @@ import Info from './components/Info';
 import LandingPage from './components/LandingPage';
 
 function App() {
-  const { goal, count, stats, history, setGoal, incrementCount, resetGoal } = useGoalPersistence();
+  const { goal, count, targetReps, stats, history, setGoal, incrementCount, resetGoal } = useGoalPersistence();
   const [view, setView] = useState('home'); // 'home' or 'mypage'
   const [hasStarted, setHasStarted] = useState(() => {
     // If there's already a goal, skip landing
@@ -44,6 +44,7 @@ function App() {
               <WorkArea 
                 goal={goal} 
                 count={count} 
+                targetReps={targetReps}
                 onIncrement={incrementCount} 
                 onReset={resetGoal} 
               />
@@ -54,6 +55,7 @@ function App() {
           <MyPage 
             goal={goal} 
             count={count}
+            targetReps={targetReps}
             stats={stats} 
             history={history} 
             onSaveGoal={setGoal}

@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 
-export default function WorkArea({ goal, count, onIncrement, onReset }) {
+export default function WorkArea({ goal, count, targetReps = 100, onIncrement, onReset }) {
   const [input, setInput] = useState('');
   const [isRecording, setIsRecording] = useState(false);
   const [feedback, setFeedback] = useState('');
+  const [sessionHistory, setSessionHistory] = useState([]);
   const inputRef = useRef(null);
   const recognitionRef = useRef(null);
 
@@ -48,39 +49,76 @@ export default function WorkArea({ goal, count, onIncrement, onReset }) {
     }
   }, []);
 
+  // Levenshtein distance for fuzzy matching
+  const getLevenshteinDistance = (a, b) => {
+    const matrix = [];
+    for (let i = 0; i <= b.length; i++) matrix[i] = [i];
+    for (let j = 0; j <= a.length; j++) matrix[0][j] = j;
+
+    for (let i = 1; i <= b.length; i++) {
+      for (let j = 1; j <= a.length; j++) {
+        if (b.charAt(i - 1) === a.charAt(j - 1)) {
+          matrix[i][j] = matrix[i - 1][j - 1];
+        } else {
+          matrix[i][j] = Math.min(
+            matrix[i - 1][j - 1] + 1,
+            matrix[i][j - 1] + 1,
+            matrix[i - 1][j] + 1
+          );
+        }
+      }
+    }
+    return matrix[b.length][a.length];
+  };
+
+  const calculateSimilarity = (s1, s2) => {
+    const longer = s1.length > s2.length ? s1 : s2;
+    const shorter = s1.length > s2.length ? s2 : s1;
+    if (longer.length === 0) return 1.0;
+    return (longer.length - getLevenshteinDistance(longer, shorter)) / longer.length;
+  };
+
   const processResult = (text) => {
-    // Robust normalization for Korean comparison
     const normalize = (str) => {
       if (!str) return '';
       return str
-        .replace(/\s+/g, '') // Remove all whitespace
-        .replace(/[.?!,]/g, '') // Remove punctuation
-        .replace(/[~`@#$%^&*()_+={}\[\]|\\:;"'<>,/]/g, '') // Remove special chars
+        .replace(/\s+/g, '')
+        .replace(/[.?!,]/g, '')
+        .replace(/[~`@#$%^&*()_+={}\[\]|\\:;"'<>,/]/g, '')
         .trim();
     };
     
     const normalizedGoal = normalize(goalRef.current);
     const normalizedInput = normalize(text);
+    const similarity = calculateSimilarity(normalizedInput, normalizedGoal);
 
-    if (normalizedInput === normalizedGoal || normalizedInput.includes(normalizedGoal) || normalizedGoal.includes(normalizedInput)) {
+    // 80% similarity or inclusion match
+    if (similarity >= 0.8 || normalizedInput.includes(normalizedGoal) || normalizedGoal.includes(normalizedInput)) {
+      const nextCount = count + 1;
       onIncrement();
-      setFeedback('성공! 기록되었습니다.');
+      setSessionHistory(prev => [{ text: goalRef.current, count: nextCount }, ...prev].slice(0, 10));
+      setFeedback(`${nextCount}번째 성공! 기록되었습니다.`);
       setTimeout(() => setFeedback(''), 1500);
     } else {
-      setFeedback(`인식 결과: "${text}" (다시 시도해 보세요)`);
+      setFeedback(`인식 결과: "${text}" (80% 이상 일치해야 합니다)`);
       setTimeout(() => setFeedback(''), 4000);
     }
   };
 
   const handleKeyDown = (e) => {
     if (e.key === 'Enter') {
-      if (input.trim() === goal) {
+      const normalize = (str) => str.replace(/\s+/g, '').replace(/[.?!,]/g, '').trim();
+      const similarity = calculateSimilarity(normalize(input), normalize(goal));
+
+      if (similarity >= 0.8) {
+        const nextCount = count + 1;
         onIncrement();
+        setSessionHistory(prev => [{ text: goal, count: nextCount }, ...prev].slice(0, 10));
         setInput('');
-        setFeedback('기록되었습니다.');
+        setFeedback(`${nextCount}번째 성공! 기록되었습니다.`);
         setTimeout(() => setFeedback(''), 1000);
       } else {
-        setFeedback('문장을 정확하게 입력해주세요.');
+        setFeedback('문장을 정확하게 입력해주세요 (80% 이상 일치 필요).');
         setTimeout(() => setFeedback(''), 3000);
       }
     }
@@ -103,7 +141,7 @@ export default function WorkArea({ goal, count, onIncrement, onReset }) {
     }
   };
 
-  const progress = (count / 100) * 100;
+  const progress = (count / targetReps) * 100;
 
   return (
     <div style={{ display: 'grid', gap: '0.75rem' }}>
@@ -116,7 +154,7 @@ export default function WorkArea({ goal, count, onIncrement, onReset }) {
       <div className="card no-mobile-radius">
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
           <h3 style={{ fontSize: '1rem' }}>진행률</h3>
-          <span style={{ fontWeight: 700, color: 'var(--accent)', fontSize: '1.125rem' }}>{count} <span style={{ color: 'var(--text-secondary)', fontSize: '0.875rem' }}>/ 100</span></span>
+          <span style={{ fontWeight: 700, color: 'var(--accent)', fontSize: '1.125rem' }}>{count} <span style={{ color: 'var(--text-secondary)', fontSize: '0.875rem' }}>/ {targetReps}</span></span>
         </div>
         
         {/* Progress Bar */}
@@ -132,12 +170,26 @@ export default function WorkArea({ goal, count, onIncrement, onReset }) {
         </div>
 
         <div style={{ display: 'grid', gap: '1rem', textAlign: 'center' }}>
-          <div style={{ height: '1.5rem', marginBottom: '0.5rem' }}>
-            {feedback && <p style={{ margin: 0, fontSize: '0.875rem', color: isRecording ? 'var(--accent)' : 'var(--text-secondary)', fontWeight: 500 }}>{feedback}</p>}
+          <div style={{ minHeight: '1.5rem', marginBottom: '0.5rem' }}>
+            {feedback ? (
+              <p style={{ 
+                margin: 0, 
+                fontSize: '1rem', 
+                color: feedback.includes('성공') ? 'var(--accent)' : 'var(--text-secondary)', 
+                fontWeight: 700,
+                fontFamily: 'var(--font-brand)'
+              }}>
+                {feedback}
+              </p>
+            ) : (
+              <p style={{ margin: 0, fontSize: '0.875rem', color: 'var(--text-secondary)' }}>
+                말하기 또는 아래에 직접 입력
+              </p>
+            )}
           </div>
 
           {/* Voice Input Button */}
-          <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '1rem' }}>
+          <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '0.5rem' }}>
             <button
               onClick={toggleRecording}
               className={isRecording ? 'pulse' : ''}
@@ -163,8 +215,6 @@ export default function WorkArea({ goal, count, onIncrement, onReset }) {
             </button>
           </div>
 
-          <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)' }}>말하기 또는 아래에 직접 입력</p>
-
           <input 
             ref={inputRef}
             type="text" 
@@ -184,7 +234,37 @@ export default function WorkArea({ goal, count, onIncrement, onReset }) {
           />
         </div>
 
-        <div style={{ marginTop: '2rem', display: 'flex', justifyContent: 'center' }}>
+        {/* Session Log */}
+        {sessionHistory.length > 0 && (
+          <div style={{ marginTop: '2rem', textAlign: 'left' }}>
+            <h4 style={{ fontSize: '0.8125rem', color: 'var(--text-secondary)', marginBottom: '0.75rem', fontWeight: 600 }}>최근 기록</h4>
+            <div style={{ 
+              maxHeight: '120px', 
+              overflowY: 'auto', 
+              display: 'grid', 
+              gap: '0.5rem',
+              paddingRight: '0.5rem'
+            }}>
+              {sessionHistory.map((item, i) => (
+                <div key={i} style={{ 
+                  fontSize: '0.8125rem', 
+                  color: 'var(--text-secondary)',
+                  display: 'flex',
+                  gap: '0.5rem',
+                  padding: '0.5rem',
+                  backgroundColor: 'var(--bg-secondary)',
+                  borderRadius: '0.4rem',
+                  alignItems: 'flex-start'
+                }}>
+                  <span style={{ color: 'var(--accent)', fontWeight: 700 }}>{item.count}.</span>
+                  <span style={{ lineBreak: 'anywhere' }}>{item.text}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        <div style={{ marginTop: '1.5rem', display: 'flex', justifyContent: 'center' }}>
           <button 
             onClick={onReset}
             style={{ 

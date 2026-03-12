@@ -6,6 +6,7 @@ export default function GoalGenerator({ onSave }) {
   const [goal, setGoal] = useState('');
   const [verb, setVerb] = useState('');
   const [freeSentence, setFreeSentence] = useState('');
+  const [targetReps, setTargetReps] = useState(100);
 
   const formatDate = (dateStr) => {
     if (!dateStr) return '____년 __월 __일';
@@ -23,7 +24,7 @@ export default function GoalGenerator({ onSave }) {
         alert('목표 문장을 입력해주세요.');
         return;
       }
-      onSave(freeSentence.trim());
+      onSave(freeSentence.trim(), targetReps);
     } else {
       if (!targetDate || !goal || !verb) {
         alert('모든 필드를 입력해주세요.');
@@ -35,9 +36,11 @@ export default function GoalGenerator({ onSave }) {
       particle = hasBatchim ? '을' : '를';
       
       const finalSentence = `나는 ${formatDate(targetDate)}에 ${goal}${particle} ${verb}하였다.`;
-      onSave(finalSentence);
+      onSave(finalSentence, targetReps);
     }
   };
+
+  const targets = [21, 50, 100, 300];
 
   return (
     <div className="card">
@@ -104,9 +107,32 @@ export default function GoalGenerator({ onSave }) {
             />
           </div>
         )}
+
+        <div>
+          <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.875rem', fontWeight: 500 }}>일일 목표 횟수</label>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '0.5rem' }}>
+            {targets.map(t => (
+              <button
+                key={t}
+                onClick={() => setTargetReps(t)}
+                style={{
+                  padding: '0.6rem 0',
+                  borderRadius: 'var(--radius-md)',
+                  border: targetReps === t ? '1.5px solid var(--accent)' : '1px solid var(--border)',
+                  backgroundColor: targetReps === t ? 'var(--accent-light)' : 'white',
+                  color: targetReps === t ? 'var(--accent)' : 'var(--text-primary)',
+                  fontWeight: 700,
+                  fontSize: '0.9rem'
+                }}
+              >
+                {t}회
+              </button>
+            ))}
+          </div>
+        </div>
         
-        <div style={{ marginTop: '1rem', padding: '1rem', backgroundColor: 'var(--accent-light)', borderRadius: 'var(--radius-md)', border: '1px solid var(--accent)' }}>
-          <p style={{ margin: 0, fontWeight: 600, color: 'var(--accent)', textAlign: 'center' }}>
+        <div style={{ marginTop: '0.5rem', padding: '1rem', backgroundColor: 'var(--accent-light)', borderRadius: 'var(--radius-md)', border: '1px solid var(--accent)' }}>
+          <p style={{ margin: 0, fontWeight: 600, color: 'var(--accent)', textAlign: 'center', fontSize: '0.9375rem', wordBreak: 'keep-all' }}>
             {generatedSentence}
           </p>
         </div>
@@ -114,13 +140,13 @@ export default function GoalGenerator({ onSave }) {
         <button 
           onClick={handleSave}
           style={{ 
-            marginTop: '1rem', 
+            marginTop: '0.5rem', 
             backgroundColor: 'var(--accent)', 
             color: 'white', 
             border: 'none', 
             padding: '1rem', 
             borderRadius: 'var(--radius-md)', 
-            fontWeight: 600 
+            fontWeight: 700 
           }}
         >
           이 목표로 시작하기

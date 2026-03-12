@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import MonthlyCalendar from './MonthlyCalendar';
 import GoalGenerator from './GoalGenerator';
 
-export default function MyPage({ goal, count, stats, history, onSaveGoal, onResetGoal }) {
+export default function MyPage({ goal, count, targetReps = 100, stats, history, onSaveGoal, onResetGoal }) {
   const [currentPage, setCurrentPage] = useState(1);
   const [isEditing, setIsEditing] = useState(false);
   const itemsPerPage = 10;
   
-  const completionCount = Object.values(stats).filter(count => count >= 100).length;
+  const completionCount = Object.values(stats).filter(val => val >= targetReps).length;
   const totalReps = Object.values(stats).reduce((acc, curr) => acc + curr, 0);
 
   // Extract target date from goal string
@@ -20,8 +20,8 @@ export default function MyPage({ goal, count, stats, history, onSaveGoal, onRese
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentHistory = history.slice(indexOfFirstItem, indexOfLastItem);
 
-  const handleSaveGoal = (newGoal) => {
-    onSaveGoal(newGoal);
+  const handleSaveGoal = (newGoal, newTargetReps) => {
+    onSaveGoal(newGoal, newTargetReps);
     setIsEditing(false);
   };
 
@@ -87,11 +87,11 @@ export default function MyPage({ goal, count, stats, history, onSaveGoal, onRese
               <div style={{ marginTop: '1rem' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '0.5rem' }}>
                   <span style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--accent)' }}>오늘의 진척도</span>
-                  <span style={{ fontSize: '0.875rem', fontWeight: 800 }}>{count} / 100</span>
+                  <span style={{ fontSize: '0.875rem', fontWeight: 800 }}>{count} / {targetReps}</span>
                 </div>
                 <div style={{ width: '100%', height: '8px', backgroundColor: 'var(--border)', borderRadius: '4px', overflow: 'hidden' }}>
                   <div style={{ 
-                    width: `${Math.min(count, 100)}%`, 
+                    width: `${Math.min((count / targetReps) * 100, 100)}%`, 
                     height: '100%', 
                     backgroundColor: 'var(--accent)', 
                     transition: 'width 0.3s ease' 

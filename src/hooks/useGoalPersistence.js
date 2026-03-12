@@ -24,6 +24,7 @@ export default function useGoalPersistence() {
     return {
       goal: '',
       count: 0,
+      targetReps: 100,
       lastSessionDate: today,
       stats: {}, // { "2024-03-12": 100 }
       history: []
@@ -34,8 +35,8 @@ export default function useGoalPersistence() {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
   }, [data]);
 
-  const setGoal = (newGoal) => {
-    setData(prev => ({ ...prev, goal: newGoal, count: 0 }));
+  const setGoal = (newGoal, targetReps = 100) => {
+    setData(prev => ({ ...prev, goal: newGoal, count: 0, targetReps }));
   };
 
   const incrementCount = () => {
@@ -45,7 +46,7 @@ export default function useGoalPersistence() {
       const newStats = { ...prev.stats, [today]: newCount };
       
       let newHistory = prev.history;
-      if (newCount === 100) {
+      if (newCount === (prev.targetReps || 100)) {
         newHistory = [
           { date: new Date().toISOString(), goal: prev.goal },
           ...prev.history
@@ -72,6 +73,7 @@ export default function useGoalPersistence() {
   return {
     goal: data.goal,
     count: data.count,
+    targetReps: data.targetReps || 100,
     stats: data.stats,
     history: data.history,
     setGoal,
