@@ -7,6 +7,9 @@ export default function GoalGenerator({ onSave }) {
   const [verb, setVerb] = useState('');
   const [freeSentence, setFreeSentence] = useState('');
   const [targetReps, setTargetReps] = useState(100);
+  const [customReps, setCustomReps] = useState('');
+  const [isCustomMode, setIsCustomMode] = useState(false);
+  const presets = [21, 50, 100, 300];
 
   const formatDate = (dateStr) => {
     if (!dateStr) return '____년 __월 __일';
@@ -19,12 +22,19 @@ export default function GoalGenerator({ onSave }) {
     : `나는 ${formatDate(targetDate)}에 ${goal || '____'}${goal.endsWith('을') || goal.endsWith('를') ? '' : '을/를'} ${verb || '____'}하였다.`;
 
   const handleSave = () => {
+    const finalReps = isCustomMode ? parseInt(customReps, 10) : targetReps;
+
+    if (isCustomMode && (isNaN(finalReps) || finalReps <= 0)) {
+      alert('유효한 목표 횟수를 입력해주세요.');
+      return;
+    }
+
     if (isFreeMode) {
       if (!freeSentence.trim()) {
         alert('목표 문장을 입력해주세요.');
         return;
       }
-      onSave(freeSentence.trim(), targetReps);
+      onSave(freeSentence.trim(), finalReps);
     } else {
       if (!targetDate || !goal || !verb) {
         alert('모든 필드를 입력해주세요.');
@@ -36,11 +46,9 @@ export default function GoalGenerator({ onSave }) {
       particle = hasBatchim ? '을' : '를';
       
       const finalSentence = `나는 ${formatDate(targetDate)}에 ${goal}${particle} ${verb}하였다.`;
-      onSave(finalSentence, targetReps);
+      onSave(finalSentence, finalReps);
     }
   };
-
-  const targets = [21, 50, 100, 300];
 
   return (
     <div className="card">
@@ -110,25 +118,73 @@ export default function GoalGenerator({ onSave }) {
 
         <div>
           <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.875rem', fontWeight: 500 }}>일일 목표 횟수</label>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '0.5rem' }}>
-            {targets.map(t => (
-              <button
-                key={t}
-                onClick={() => setTargetReps(t)}
-                style={{
-                  padding: '0.6rem 0',
-                  borderRadius: 'var(--radius-md)',
-                  border: targetReps === t ? '1.5px solid var(--accent)' : '1px solid var(--border)',
-                  backgroundColor: targetReps === t ? 'var(--accent-light)' : 'white',
-                  color: targetReps === t ? 'var(--accent)' : 'var(--text-primary)',
-                  fontWeight: 700,
-                  fontSize: '0.9rem'
-                }}
-              >
-                {t}회
-              </button>
-            ))}
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '1.5rem' }}>
+          {presets.map(num => (
+            <button
+              key={num}
+              type="button"
+              onClick={() => {
+                setTargetReps(num);
+                setIsCustomMode(false);
+              }}
+              style={{
+                flex: 1,
+                minWidth: '60px',
+                padding: '0.6rem 0',
+                borderRadius: '0.5rem',
+                border: `2px solid ${targetReps === num && !isCustomMode ? 'var(--accent)' : 'var(--border)'}`,
+                backgroundColor: targetReps === num && !isCustomMode ? 'var(--accent-light)' : 'white',
+                color: targetReps === num && !isCustomMode ? 'var(--accent)' : 'var(--text-secondary)',
+                fontWeight: 700,
+                fontSize: '0.875rem',
+                cursor: 'pointer'
+              }}
+            >
+              {num}회
+            </button>
+          ))}
+          <button
+            type="button"
+            onClick={() => setIsCustomMode(true)}
+            style={{
+              flex: 1,
+              minWidth: '60px',
+              padding: '0.6rem 0',
+              borderRadius: '0.5rem',
+              border: `2px solid ${isCustomMode ? 'var(--accent)' : 'var(--border)'}`,
+              backgroundColor: isCustomMode ? 'var(--accent-light)' : 'white',
+              color: isCustomMode ? 'var(--accent)' : 'var(--text-secondary)',
+              fontWeight: 700,
+              fontSize: '0.875rem',
+              cursor: 'pointer'
+            }}
+          >
+            직접 입력
+          </button>
+        </div>
+
+        {isCustomMode && (
+          <div style={{ marginBottom: '1.5rem', animation: 'fadeIn 0.2s ease-out' }}>
+            <input 
+              type="number"
+              value={customReps}
+              onChange={(e) => setCustomReps(e.target.value)}
+              placeholder="예: 150"
+              style={{ 
+                width: '100%', 
+                padding: '0.75rem', 
+                borderRadius: 'var(--radius-md)', 
+                border: '1px solid var(--accent)', 
+                fontSize: '1rem',
+                outline: 'none',
+                textAlign: 'center'
+              }}
+            />
+            <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', marginTop: '0.4rem', textAlign: 'center' }}>
+              원하는 목표 횟수를 숫자로 입력해주세요.
+            </p>
           </div>
+        )}
         </div>
         
         <div style={{ marginTop: '0.5rem', padding: '1rem', backgroundColor: 'var(--accent-light)', borderRadius: 'var(--radius-md)', border: '1px solid var(--accent)' }}>

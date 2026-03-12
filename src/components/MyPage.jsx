@@ -67,8 +67,26 @@ export default function MyPage({ goal, count, targetReps = 100, stats, history, 
         <MonthlyCalendar stats={stats} />
       </section>
 
-      <section className="card no-mobile-radius">
-        <h3 style={{ fontSize: '1.125rem', marginBottom: '1rem' }}>현재 목표 및 진척도</h3>
+      <section className="card no-mobile-radius" style={{ position: 'relative' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+          <h3 style={{ fontSize: '1.125rem', margin: 0 }}>현재 목표 및 진척도</h3>
+          {goal && (
+            <button 
+              onClick={() => setIsEditing(true)}
+              style={{ 
+                background: 'none', 
+                border: 'none', 
+                fontSize: '1.125rem', 
+                padding: '0.25rem',
+                cursor: 'pointer',
+                opacity: 0.6
+              }}
+              title="목표 수정"
+            >
+              ⚙️
+            </button>
+          )}
+        </div>
         
         {targetDateInfo && (
           <div style={{ marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
@@ -78,7 +96,7 @@ export default function MyPage({ goal, count, targetReps = 100, stats, history, 
           </div>
         )}
 
-        <div style={{ padding: '1.25rem', backgroundColor: 'var(--bg-secondary)', borderRadius: 'var(--radius-md)', border: '1px solid var(--border)', marginBottom: '1.25rem' }}>
+        <div style={{ padding: '1.25rem', backgroundColor: 'var(--bg-secondary)', borderRadius: 'var(--radius-md)', border: '1px solid var(--border)' }}>
           {goal ? (
             <>
               <p style={{ margin: '0 0 1rem 0', fontSize: '1rem', fontWeight: 700, color: 'var(--text-primary)', lineHeight: 1.4, wordBreak: 'keep-all' }}>
@@ -100,48 +118,24 @@ export default function MyPage({ goal, count, targetReps = 100, stats, history, 
               </div>
             </>
           ) : (
-            <p style={{ margin: 0, fontSize: '0.875rem', color: 'var(--text-secondary)', textAlign: 'center', padding: '1rem 0' }}>
-              현재 진행 중인 목표가 없습니다.
-            </p>
-          )}
-        </div>
-
-        <div style={{ display: 'grid', gap: '0.75rem' }}>
-          <button 
-            onClick={() => setIsEditing(true)}
-            style={{ 
-              width: '100%', 
-              padding: '0.85rem', 
-              backgroundColor: 'var(--accent)', 
-              color: 'white', 
-              border: 'none', 
-              borderRadius: 'var(--radius-md)',
-              fontWeight: 700,
-              cursor: 'pointer',
-              fontSize: '0.9375rem',
-              boxShadow: '0 4px 12px rgba(222, 72, 58, 0.2)'
-            }}
-          >
-            {goal ? '+ 새로운 목표 추가하기' : '첫 목표 만들기'}
-          </button>
-          
-          {goal && (
-            <button 
-              onClick={() => setIsEditing(true)}
-              style={{ 
-                width: '100%', 
-                padding: '0.75rem', 
-                backgroundColor: 'transparent', 
-                border: '1px solid var(--border)', 
-                borderRadius: 'var(--radius-md)',
-                color: 'var(--text-secondary)',
-                fontWeight: 600,
-                cursor: 'pointer',
-                fontSize: '0.875rem'
-              }}
-            >
-              현재 목표 수정하기
-            </button>
+            <div style={{ textAlign: 'center', padding: '1rem 0' }}>
+              <p style={{ color: 'var(--text-secondary)', marginBottom: '1rem', fontSize: '0.875rem' }}>설정된 목표가 없습니다.</p>
+              <button 
+                onClick={() => setIsEditing(true)}
+                style={{
+                  padding: '0.6rem 1.5rem',
+                  borderRadius: 'var(--radius-md)',
+                  backgroundColor: 'var(--accent)',
+                  color: 'white',
+                  border: 'none',
+                  fontWeight: 700,
+                  fontSize: '0.875rem',
+                  cursor: 'pointer'
+                }}
+              >
+                첫 목표 만들기
+              </button>
+            </div>
           )}
         </div>
       </section>

@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
+import GoalGenerator from './GoalGenerator';
 
-export default function WorkArea({ goal, count, targetReps = 100, onIncrement, onReset }) {
+export default function WorkArea({ goal, count, targetReps = 100, onIncrement, onReset, onSaveGoal }) {
   const [input, setInput] = useState('');
   const [isRecording, setIsRecording] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
   const [feedback, setFeedback] = useState('');
   const [sessionHistory, setSessionHistory] = useState([]);
   const inputRef = useRef(null);
@@ -13,6 +15,11 @@ export default function WorkArea({ goal, count, targetReps = 100, onIncrement, o
   useEffect(() => {
     goalRef.current = goal;
   }, [goal]);
+
+  const handleSaveGoal = (newGoal, newTargetReps) => {
+    onSaveGoal(newGoal, newTargetReps);
+    setIsEditing(false);
+  };
 
   useEffect(() => {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -143,12 +150,46 @@ export default function WorkArea({ goal, count, targetReps = 100, onIncrement, o
 
   const progress = (count / targetReps) * 100;
 
+  if (isEditing) {
+    return (
+      <div style={{ animation: 'fadeIn 0.3s ease-out', paddingBottom: '3rem' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+          <h2 style={{ fontSize: '1.25rem', fontFamily: 'var(--font-brand)', fontWeight: 400, color: 'var(--accent)' }}>목표 수정하기</h2>
+          <button 
+            onClick={() => setIsEditing(false)}
+            style={{ background: 'none', border: 'none', color: 'var(--text-secondary)', fontWeight: 600, fontSize: '0.875rem' }}
+          >
+            취소
+          </button>
+        </div>
+        <GoalGenerator onSave={handleSaveGoal} />
+      </div>
+    );
+  }
+
   return (
     <div style={{ display: 'grid', gap: '0.75rem' }}>
       {/* Target Sentence Card */}
-      <div className="card no-mobile-radius" style={{ borderLeft: '4px solid var(--accent)', paddingBottom: '1rem' }}>
-        <p style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--accent)', marginBottom: '0.25rem' }}>오늘의 목표</p>
-        <h2 style={{ fontSize: '1.25rem', lineHeight: 1.4, wordBreak: 'keep-all' }}>{goal}</h2>
+      <div className="card no-mobile-radius" style={{ borderLeft: '4px solid var(--accent)', paddingBottom: '1rem', position: 'relative' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+          <p style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--accent)', marginBottom: '0.25rem' }}>오늘의 목표</p>
+          <button 
+            onClick={() => setIsEditing(true)}
+            style={{ 
+              background: 'none', 
+              border: 'none', 
+              fontSize: '1.125rem', 
+              padding: '0.25rem',
+              cursor: 'pointer',
+              opacity: 0.6,
+              marginTop: '-0.25rem'
+            }}
+            title="목표 수정"
+          >
+            ⚙️
+          </button>
+        </div>
+        <h2 style={{ fontSize: '1.25rem', lineHeight: 1.4, wordBreak: 'keep-all', paddingRight: '1.5rem' }}>{goal}</h2>
       </div>
 
       <div className="card no-mobile-radius">
