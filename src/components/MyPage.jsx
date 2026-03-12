@@ -48,44 +48,71 @@ export default function MyPage({ goal, count, stats, history, onReset }) {
         )}
 
         <div style={{ padding: '1.25rem', backgroundColor: 'var(--bg-secondary)', borderRadius: 'var(--radius-md)', border: '1px solid var(--border)', marginBottom: '1.25rem' }}>
-          <p style={{ margin: '0 0 1rem 0', fontSize: '1rem', fontWeight: 700, color: 'var(--text-primary)', lineHeight: 1.4, wordBreak: 'keep-all' }}>
-            {goal || '설정된 목표가 없습니다.'}
-          </p>
-          
-          {goal && (
-            <div style={{ marginTop: '1rem' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '0.5rem' }}>
-                <span style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--accent)' }}>오늘의 진척도</span>
-                <span style={{ fontSize: '0.875rem', fontWeight: 800 }}>{count} / 100</span>
+          {goal ? (
+            <>
+              <p style={{ margin: '0 0 1rem 0', fontSize: '1rem', fontWeight: 700, color: 'var(--text-primary)', lineHeight: 1.4, wordBreak: 'keep-all' }}>
+                {goal}
+              </p>
+              <div style={{ marginTop: '1rem' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '0.5rem' }}>
+                  <span style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--accent)' }}>오늘의 진척도</span>
+                  <span style={{ fontSize: '0.875rem', fontWeight: 800 }}>{count} / 100</span>
+                </div>
+                <div style={{ width: '100%', height: '8px', backgroundColor: 'var(--border)', borderRadius: '4px', overflow: 'hidden' }}>
+                  <div style={{ 
+                    width: `${Math.min(count, 100)}%`, 
+                    height: '100%', 
+                    backgroundColor: 'var(--accent)', 
+                    transition: 'width 0.3s ease' 
+                  }} />
+                </div>
               </div>
-              <div style={{ width: '100%', height: '8px', backgroundColor: 'var(--border)', borderRadius: '4px', overflow: 'hidden' }}>
-                <div style={{ 
-                  width: `${Math.min(count, 100)}%`, 
-                  height: '100%', 
-                  backgroundColor: 'var(--accent)', 
-                  transition: 'width 0.3s ease' 
-                }} />
-              </div>
-            </div>
+            </>
+          ) : (
+            <p style={{ margin: 0, fontSize: '0.875rem', color: 'var(--text-secondary)', textAlign: 'center', padding: '1rem 0' }}>
+              현재 진행 중인 목표가 없습니다.
+            </p>
           )}
         </div>
 
-        <button 
-          onClick={onReset}
-          style={{ 
-            width: '100%', 
-            padding: '0.75rem', 
-            backgroundColor: 'transparent', 
-            border: '1px solid var(--border)', 
-            borderRadius: 'var(--radius-md)',
-            color: 'var(--text-secondary)',
-            fontWeight: 600,
-            cursor: 'pointer',
-            fontSize: '0.875rem'
-          }}
-        >
-          목표 변경하기
-        </button>
+        <div style={{ display: 'grid', gap: '0.75rem' }}>
+          <button 
+            onClick={onReset}
+            style={{ 
+              width: '100%', 
+              padding: '0.85rem', 
+              backgroundColor: 'var(--accent)', 
+              color: 'white', 
+              border: 'none', 
+              borderRadius: 'var(--radius-md)',
+              fontWeight: 700,
+              cursor: 'pointer',
+              fontSize: '0.9375rem',
+              boxShadow: '0 4px 12px rgba(222, 72, 58, 0.2)'
+            }}
+          >
+            {goal ? '+ 새로운 목표 추가하기' : '첫 목표 만들기'}
+          </button>
+          
+          {goal && (
+            <button 
+              onClick={onReset}
+              style={{ 
+                width: '100%', 
+                padding: '0.75rem', 
+                backgroundColor: 'transparent', 
+                border: '1px solid var(--border)', 
+                borderRadius: 'var(--radius-md)',
+                color: 'var(--text-secondary)',
+                fontWeight: 600,
+                cursor: 'pointer',
+                fontSize: '0.875rem'
+              }}
+            >
+              현재 목표 수정하기
+            </button>
+          )}
+        </div>
       </section>
 
       {history.length > 0 && (
