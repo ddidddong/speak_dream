@@ -96,7 +96,7 @@ function AppContent() {
         스픽드림: 무의식에 새기는 확언의 힘
       </p>
 
-      <main style={{ paddingBottom: '5rem' }}>
+      <main>
         {activeTab === 'work' ? (
           <>
             {!goal ? (
@@ -112,17 +112,25 @@ function AppContent() {
               />
             )}
             <Info />
+            <footer style={{ marginTop: '2rem', padding: '2rem 0', textAlign: 'center', opacity: 0.5 }}>
+              <p style={{ fontSize: '0.75rem' }}>© 2026 SpeakDream. Always keep going.</p>
+            </footer>
           </>
         ) : (
-          <MyPage 
-            goal={goal} 
-            count={count}
-            targetReps={targetReps}
-            stats={stats} 
-            history={history} 
-            onSaveGoal={setGoal}
-            onResetGoal={resetGoal}
-          />
+          <>
+            <MyPage 
+              goal={goal} 
+              count={count}
+              targetReps={targetReps}
+              stats={stats} 
+              history={history} 
+              onSaveGoal={setGoal}
+              onResetGoal={resetGoal}
+            />
+            <footer style={{ marginTop: '1rem', padding: '1rem', textAlign: 'center', opacity: 0.5 }}>
+              <p style={{ fontSize: '0.75rem' }}>© 2026 SpeakDream. Always keep going.</p>
+            </footer>
+          </>
         )}
       </main>
 
@@ -177,9 +185,7 @@ function AppContent() {
         </button>
       </nav>
 
-      <footer style={{ marginTop: '1rem', padding: '1rem', textAlign: 'center', opacity: 0.5 }}>
-        <p style={{ fontSize: '0.75rem' }}>© 2026 SpeakDream. Always keep going.</p>
-      </footer>
+      {/* Footer previously here - now inside main */}
 
       <style>{`
         @keyframes fadeIn {

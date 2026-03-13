@@ -45,15 +45,18 @@
   -webkit-tap-highlight-color: transparent;
 }
 
-body {
+html, body {
   margin: 0;
-  min-width: 320px;
+  padding: 0;
+  width: 100%;
   height: 100vh;
-  height: 100dvh; /* Dynamic viewport height for mobile */
+  height: 100dvh;
   overflow: hidden;
   background-color: var(--bg-secondary);
   -webkit-user-select: none;
   user-select: none;
+  /* Prevent elastic scrolling/bounce on mobile */
+  overscroll-behavior-y: none;
 }
 
 #root {
@@ -108,7 +111,14 @@ main {
   flex: 1;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
-  padding: 0 1rem 5rem 1rem; /* Space for bottom nav */
+  padding: 0 1rem 2rem 1rem; 
+  /* Hide scrollbar for a more native feel but keep scrolling functional */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;  /* IE/Edge */
+}
+
+main::-webkit-scrollbar {
+  display: none; /* Chrome/Safari */
 }
 
 @media (max-width: 640px) {

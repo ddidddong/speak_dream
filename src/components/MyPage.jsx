@@ -27,7 +27,7 @@ export default function MyPage({ goal, count, targetReps = 100, stats, history, 
 
   if (isEditing) {
     return (
-      <div style={{ display: 'grid', gap: '0.75rem', paddingBottom: '5rem' }}>
+      <div style={{ display: 'grid', gap: '0.75rem' }}>
         <GoalGenerator onSave={handleSaveGoal} />
         <button 
           onClick={() => setIsEditing(false)}
@@ -50,7 +50,7 @@ export default function MyPage({ goal, count, targetReps = 100, stats, history, 
   }
 
   return (
-    <div style={{ display: 'grid', gap: '0.75rem', paddingBottom: '5rem' }}>
+    <div style={{ display: 'grid', gap: '0.75rem' }}>
       <section className="card no-mobile-radius">
         <h3 style={{ fontSize: '1.25rem', marginBottom: '1.25rem', fontFamily: 'var(--font-brand)', fontWeight: 400 }}>나의 습관 캘린더</h3>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem', marginBottom: '1rem' }}>
