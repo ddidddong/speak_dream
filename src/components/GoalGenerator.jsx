@@ -18,9 +18,9 @@ export default function GoalGenerator({ onSave }) {
   };
 
   const generatedSentence = isFreeMode 
-    ? freeSentence || '자유롭게 목표 문장을 입력해주세요.'
+    ? freeSentence || ''
     : (!targetDate && !goal && !verb) 
-      ? '위 항목을 채워 나만의 목표 문장을 완성해보세요!' 
+      ? '' 
       : `나는 ${formatDate(targetDate)}에 ${goal || '____'}${goal.endsWith('을') || goal.endsWith('를') ? '' : '을/를'} ${verb || '____'}하였다.`;
 
   const handleSave = () => {
@@ -189,11 +189,13 @@ export default function GoalGenerator({ onSave }) {
         )}
         </div>
         
-        <div style={{ marginTop: '0.5rem', padding: '1rem', backgroundColor: 'var(--accent-light)', borderRadius: 'var(--radius-md)', border: '1px solid var(--accent)' }}>
-          <p style={{ margin: 0, fontWeight: 600, color: 'var(--accent)', textAlign: 'center', fontSize: '0.9375rem', wordBreak: 'keep-all' }}>
-            {generatedSentence}
-          </p>
-        </div>
+        {generatedSentence && (
+          <div style={{ marginTop: '0.5rem', padding: '1rem', backgroundColor: 'var(--accent-light)', borderRadius: 'var(--radius-md)', border: '1px solid var(--accent)' }}>
+            <p style={{ margin: 0, fontWeight: 600, color: 'var(--accent)', textAlign: 'center', fontSize: '0.9375rem', wordBreak: 'keep-all' }}>
+              {generatedSentence}
+            </p>
+          </div>
+        )}
 
         <button 
           onClick={handleSave}
