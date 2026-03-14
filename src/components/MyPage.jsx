@@ -104,7 +104,7 @@ export default function MyPage({ goal, count, targetReps = 100, stats, history, 
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem', padding: '0 0.25rem' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.625rem' }}>
             <div style={{ width: '4px', height: '1.375rem', background: 'linear-gradient(180deg, var(--text-primary) 0%, var(--text-secondary) 100%)', borderRadius: '4px', boxShadow: '0 0 8px rgba(0,0,0,0.1)' }} />
-            <h3 style={{ fontSize: '1.375rem', margin: 0, fontWeight: 800, letterSpacing: '-0.03em' }}>현재 목표</h3>
+            <h3 style={{ fontSize: '1.375rem', margin: 0, fontWeight: 800, letterSpacing: '-0.03em' }}>오늘의 목표</h3>
           </div>
           {goal && (
             <button 
