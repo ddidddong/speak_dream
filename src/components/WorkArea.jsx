@@ -231,23 +231,28 @@ export default function WorkArea({ goal, count, targetReps = 100, onIncrement, o
       </div>
 
       <div style={{ 
-        background: '#ffffff',
+        background: isRecording 
+          ? 'linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.8)), url("https://images.unsplash.com/photo-1506744626753-14074211516e?auto=format&fit=crop&q=80&w=1000") center/cover no-repeat'
+          : '#ffffff',
         borderRadius: '1.5rem',
         padding: '2rem 1.5rem',
-        border: '1px solid rgba(0,0,0,0.06)',
-        boxShadow: '0 16px 40px rgba(0,0,0,0.04), inset 0 2px 4px rgba(255,255,255,0.8)',
+        border: isRecording ? '1px solid rgba(255,255,255,0.1)' : '1px solid rgba(0,0,0,0.06)',
+        boxShadow: isRecording 
+          ? '0 24px 48px rgba(0,0,0,0.4), inset 0 2px 4px rgba(255,255,255,0.1)' 
+          : '0 16px 40px rgba(0,0,0,0.04), inset 0 2px 4px rgba(255,255,255,0.8)',
+        transition: 'all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)',
         position: 'relative'
       }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-          <h3 style={{ fontSize: '1.125rem', fontWeight: 800, letterSpacing: '-0.02em' }}>진행률</h3>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem', transition: 'color 0.5s ease' }}>
+          <h3 style={{ fontSize: '1.125rem', fontWeight: 800, letterSpacing: '-0.02em', color: isRecording ? 'rgba(255,255,255,0.9)' : 'inherit', transition: 'color 0.5s ease' }}>진행률</h3>
           <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.375rem' }}>
-            <span style={{ fontWeight: 900, color: 'var(--accent)', fontSize: '1.5rem', letterSpacing: '-0.03em' }}>{count}</span>
-            <span style={{ color: 'var(--text-secondary)', fontSize: '0.9375rem', fontWeight: 600 }}>/ {targetReps}</span>
+            <span style={{ fontWeight: 900, color: isRecording ? '#ffffff' : 'var(--accent)', fontSize: '1.5rem', letterSpacing: '-0.03em', transition: 'color 0.5s ease' }}>{count}</span>
+            <span style={{ color: isRecording ? 'rgba(255,255,255,0.6)' : 'var(--text-secondary)', fontSize: '0.9375rem', fontWeight: 600, transition: 'color 0.5s ease' }}>/ {targetReps}</span>
           </div>
         </div>
         
         {/* Progress Bar */}
-        <div style={{ height: '14px', backgroundColor: 'rgba(0,0,0,0.04)', borderRadius: '7px', overflow: 'hidden', marginBottom: '2.5rem', boxShadow: 'inset 0 1px 4px rgba(0,0,0,0.05)' }}>
+        <div style={{ height: '14px', backgroundColor: isRecording ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.04)', borderRadius: '7px', overflow: 'hidden', marginBottom: '2.5rem', boxShadow: 'inset 0 1px 4px rgba(0,0,0,0.05)', transition: 'background-color 0.5s ease' }}>
           <div 
             style={{ 
               height: '100%', 
@@ -275,19 +280,20 @@ export default function WorkArea({ goal, count, targetReps = 100, onIncrement, o
               <p style={{ 
                 margin: 0, 
                 fontSize: '1.0625rem', 
-                color: feedback.includes('성공') ? 'var(--accent)' : 'var(--text-secondary)', 
+                color: feedback.includes('성공') ? (isRecording ? '#4ade80' : 'var(--accent)') : (isRecording ? 'rgba(255,255,255,0.9)' : 'var(--text-secondary)'), 
                 fontWeight: 700,
                 letterSpacing: '-0.02em',
-                background: feedback.includes('성공') ? 'var(--accent-light)' : 'rgba(0,0,0,0.04)',
+                background: feedback.includes('성공') ? (isRecording ? 'rgba(74, 222, 128, 0.15)' : 'var(--accent-light)') : (isRecording ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.04)'),
                 padding: '0.4rem 1rem',
                 borderRadius: '2rem',
-                animation: 'fadeInUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)'
+                animation: 'fadeInUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)',
+                transition: 'all 0.5s ease'
               }}>
                 {feedback}
               </p>
             ) : (
-              <p style={{ margin: 0, fontSize: '0.9375rem', color: 'var(--text-secondary)', fontWeight: 600, letterSpacing: '-0.01em' }}>
-                마이크를 누르고 말하거나, 아래에 입력하세요
+              <p style={{ margin: 0, fontSize: '0.9375rem', color: isRecording ? 'rgba(255,255,255,0.8)' : 'var(--text-secondary)', fontWeight: 600, letterSpacing: '-0.01em', transition: 'color 0.5s ease' }}>
+                {isRecording ? "소리내어 목표를 선언해보세요" : "마이크를 누르고 말하거나, 아래에 입력하세요"}
               </p>
             )}
           </div>
@@ -354,34 +360,36 @@ export default function WorkArea({ goal, count, targetReps = 100, onIncrement, o
             </button>
           </div>
 
-          <input 
-            ref={inputRef}
-            type="text" 
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyDown={handleKeyDown}
-            placeholder="직접 문장을 입력할 수도 있어요!"
-            style={{ 
-              width: '100%', 
-              padding: '1.25rem', 
-              borderRadius: '1rem', 
-              border: '2px solid rgba(0,0,0,0.04)', 
-              backgroundColor: '#faf9f8',
-              fontSize: '1.0625rem',
-              outline: 'none',
-              textAlign: 'center',
-              fontWeight: 500,
-              color: 'var(--text-primary)',
-              transition: 'all 0.2s ease',
-              boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.02)'
-            }}
-            onFocus={(e) => { e.currentTarget.style.borderColor = 'var(--accent)'; e.currentTarget.style.backgroundColor = '#ffffff'; e.currentTarget.style.boxShadow = '0 0 0 4px rgba(222, 72, 58, 0.1)'; }}
-            onBlur={(e) => { e.currentTarget.style.borderColor = 'rgba(0,0,0,0.04)'; e.currentTarget.style.backgroundColor = '#faf9f8'; e.currentTarget.style.boxShadow = 'inset 0 2px 4px rgba(0,0,0,0.02)'; }}
-          />
+          {!isRecording && (
+            <input 
+              ref={inputRef}
+              type="text" 
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={handleKeyDown}
+              placeholder="직접 문장을 입력할 수도 있어요!"
+              style={{ 
+                width: '100%', 
+                padding: '1.25rem', 
+                borderRadius: '1rem', 
+                border: '2px solid rgba(0,0,0,0.04)', 
+                backgroundColor: '#faf9f8',
+                fontSize: '1.0625rem',
+                outline: 'none',
+                textAlign: 'center',
+                fontWeight: 500,
+                color: 'var(--text-primary)',
+                transition: 'all 0.2s ease',
+                boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.02)'
+              }}
+              onFocus={(e) => { e.currentTarget.style.borderColor = 'var(--accent)'; e.currentTarget.style.backgroundColor = '#ffffff'; e.currentTarget.style.boxShadow = '0 0 0 4px rgba(222, 72, 58, 0.1)'; }}
+              onBlur={(e) => { e.currentTarget.style.borderColor = 'rgba(0,0,0,0.04)'; e.currentTarget.style.backgroundColor = '#faf9f8'; e.currentTarget.style.boxShadow = 'inset 0 2px 4px rgba(0,0,0,0.02)'; }}
+            />
+          )}
         </div>
 
         {/* Session Log */}
-        {sessionHistory.length > 0 && (
+        {!isRecording && sessionHistory.length > 0 && (
           <div style={{ marginTop: '2.5rem', textAlign: 'left', animation: 'fadeIn 0.4s ease-out' }}>
             <h4 style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', marginBottom: '1rem', fontWeight: 700, letterSpacing: '-0.01em', textTransform: 'uppercase' }}>실시간 기록</h4>
             <div style={{ 
@@ -413,30 +421,32 @@ export default function WorkArea({ goal, count, targetReps = 100, onIncrement, o
           </div>
         )}
 
-        <div style={{ marginTop: '2rem', display: 'flex', justifyContent: 'center' }}>
-          <button 
-            onClick={onReset}
-            style={{ 
-              background: 'rgba(0,0,0,0.04)', 
-              border: 'none', 
-              color: 'var(--text-secondary)', 
-              fontSize: '0.875rem', 
-              padding: '0.5rem 1.25rem',
-              borderRadius: '2rem',
-              fontWeight: 600,
-              cursor: 'pointer',
-              transition: 'all 0.2s ease',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.375rem'
-            }}
-            onMouseOver={(e) => { e.currentTarget.style.background = 'rgba(222, 72, 58, 0.1)'; e.currentTarget.style.color = 'var(--accent)'; }}
-            onMouseOut={(e) => { e.currentTarget.style.background = 'rgba(0,0,0,0.04)'; e.currentTarget.style.color = 'var(--text-secondary)'; }}
-          >
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path></svg>
-            기록 초기화
-          </button>
-        </div>
+        {!isRecording && (
+          <div style={{ marginTop: '2rem', display: 'flex', justifyContent: 'center' }}>
+            <button 
+              onClick={onReset}
+              style={{ 
+                background: 'rgba(0,0,0,0.04)', 
+                border: 'none', 
+                color: 'var(--text-secondary)', 
+                fontSize: '0.875rem', 
+                padding: '0.5rem 1.25rem',
+                borderRadius: '2rem',
+                fontWeight: 600,
+                cursor: 'pointer',
+                transition: 'all 0.2s ease',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.375rem'
+              }}
+              onMouseOver={(e) => { e.currentTarget.style.background = 'rgba(222, 72, 58, 0.1)'; e.currentTarget.style.color = 'var(--accent)'; }}
+              onMouseOut={(e) => { e.currentTarget.style.background = 'rgba(0,0,0,0.04)'; e.currentTarget.style.color = 'var(--text-secondary)'; }}
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path></svg>
+              기록 초기화
+            </button>
+          </div>
+        )}
       </div>
 
       <style>{`
