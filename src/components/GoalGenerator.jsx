@@ -19,7 +19,9 @@ export default function GoalGenerator({ onSave }) {
 
   const generatedSentence = isFreeMode 
     ? freeSentence || '자유롭게 목표 문장을 입력해주세요.'
-    : `나는 ${formatDate(targetDate)}에 ${goal || '____'}${goal.endsWith('을') || goal.endsWith('를') ? '' : '을/를'} ${verb || '____'}하였다.`;
+    : (!targetDate && !goal && !verb) 
+      ? '위 항목을 채워 나만의 목표 문장을 완성해보세요!' 
+      : `나는 ${formatDate(targetDate)}에 ${goal || '____'}${goal.endsWith('을') || goal.endsWith('를') ? '' : '을/를'} ${verb || '____'}하였다.`;
 
   const handleSave = () => {
     const finalReps = isCustomMode ? parseInt(customReps, 10) : targetReps;
