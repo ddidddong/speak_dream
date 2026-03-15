@@ -53,31 +53,31 @@ export default function MyPage({ goal, count, targetReps = 100, stats, history, 
     <div style={{ display: 'grid', gap: '0.75rem' }}>
       <section style={{ marginBottom: '1rem' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.625rem', marginBottom: '1.25rem', padding: '0 0.25rem' }}>
-          <div style={{ width: '4px', height: '1.375rem', background: 'linear-gradient(180deg, var(--accent) 0%, #ff8e53 100%)', borderRadius: '4px', boxShadow: '0 0 8px rgba(222, 72, 58, 0.4)' }} />
+          <div style={{ width: '4px', height: '1.375rem', background: 'linear-gradient(180deg, var(--accent) 0%, #FF8C40 100%)', borderRadius: '4px', boxShadow: '0 0 8px rgba(242, 78, 7, 0.4)' }} />
           <h3 style={{ fontSize: '1.375rem', margin: 0, fontFamily: 'var(--font-brand)', fontWeight: 400, letterSpacing: '-0.03em', color: 'var(--text-primary)' }}>나의 습관 캘린더</h3>
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.875rem', marginBottom: '1.75rem' }}>
           <div style={{ 
             padding: '1.5rem 1rem', 
-            background: 'linear-gradient(135deg, #ffffff 0%, #fffaf9 100%)', 
+            background: 'linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%)', 
             borderRadius: '1.25rem', 
             textAlign: 'center',
-            boxShadow: '0 10px 24px rgba(222, 72, 58, 0.08), inset 0 2px 4px rgba(255,255,255,0.8)',
-            border: '1px solid rgba(222, 72, 58, 0.1)',
+            boxShadow: '0 10px 24px rgba(242, 78, 7, 0.08), inset 0 2px 4px rgba(255,255,255,0.8)',
+            border: '1px solid rgba(242, 78, 7, 0.1)',
             position: 'relative',
             overflow: 'hidden',
             transition: 'all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)',
             cursor: 'default'
           }}
-          onMouseOver={(e) => { e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.boxShadow = '0 16px 32px rgba(222, 72, 58, 0.12)'; }}
-          onMouseOut={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 10px 24px rgba(222, 72, 58, 0.08)'; }}>
+          onMouseOver={(e) => { e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.boxShadow = '0 16px 32px rgba(242, 78, 7, 0.12)'; }}
+          onMouseOut={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 10px 24px rgba(242, 78, 7, 0.08)'; }}>
             <p style={{ position: 'relative', margin: '0 0 0.5rem 0', fontSize: '0.8125rem', color: 'var(--accent)', fontWeight: 700, letterSpacing: '0.02em', textTransform: 'uppercase' }}>🔥 완료한 날</p>
-            <p style={{ position: 'relative', margin: 0, fontSize: '2.5rem', fontWeight: 800, color: 'var(--accent)', fontFamily: 'var(--font-brand)', lineHeight: 1, textShadow: '0 2px 8px rgba(222,72,58,0.2)' }}>{completionCount}<span style={{fontSize:'1rem', fontWeight:600, marginLeft:'4px', color:'var(--text-secondary)'}}>일</span></p>
+            <p style={{ position: 'relative', margin: 0, fontSize: '2.5rem', fontWeight: 800, color: 'var(--accent)', fontFamily: 'var(--font-brand)', lineHeight: 1, textShadow: '0 2px 8px rgba(242, 78, 7, 0.2)' }}>{completionCount}<span style={{fontSize:'1rem', fontWeight:600, marginLeft:'4px', color:'var(--text-secondary)'}}>일</span></p>
             <div style={{ position:'absolute', top:'-20px', right:'-20px', width:'80px', height:'80px', background:'var(--accent)', opacity:'0.06', borderRadius:'50%', filter:'blur(10px)' }} />
           </div>
           <div style={{ 
             padding: '1.5rem 1rem', 
-            background: 'linear-gradient(135deg, #ffffff 0%, #fcfcfc 100%)', 
+            background: 'linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%)', 
             borderRadius: '1.25rem', 
             textAlign: 'center', 
             border: '1px solid rgba(0,0,0,0.06)',
@@ -158,7 +158,7 @@ export default function MyPage({ goal, count, targetReps = 100, stats, history, 
           <div style={{ 
             position: 'relative',
             padding: '2rem 1.75rem', 
-            background: 'linear-gradient(145deg, #ffffff 0%, #faf9f8 100%)', 
+            background: 'linear-gradient(145deg, var(--bg-primary) 0%, var(--bg-secondary) 100%)', 
             borderRadius: '1.5rem', 
             border: '1px solid rgba(0,0,0,0.06)',
             boxShadow: '0 16px 40px rgba(0,0,0,0.06), inset 0 2px 4px rgba(255,255,255,0.8)',
@@ -166,7 +166,7 @@ export default function MyPage({ goal, count, targetReps = 100, stats, history, 
           }}>
             {/* Ambient Background Glow */}
             <div style={{ position:'absolute', top:'-40px', right:'-20px', width:'150px', height:'150px', background:'var(--accent)', opacity:'0.05', filter:'blur(40px)', borderRadius:'50%', pointerEvents:'none' }} />
-            <div style={{ position:'absolute', bottom:'-50px', left:'-30px', width:'200px', height:'200px', background:'#ffaa00', opacity:'0.04', filter:'blur(40px)', borderRadius:'50%', pointerEvents:'none' }} />
+            <div style={{ position:'absolute', bottom:'-50px', left:'-30px', width:'200px', height:'200px', background:'var(--accent)', opacity:'0.04', filter:'blur(40px)', borderRadius:'50%', pointerEvents:'none' }} />
             
             <p style={{ 
               position: 'relative',
@@ -199,12 +199,12 @@ export default function MyPage({ goal, count, targetReps = 100, stats, history, 
                 <div style={{ 
                   width: `${Math.min((count / targetReps) * 100, 100)}%`, 
                   height: '100%', 
-                  background: 'linear-gradient(90deg, var(--accent) 0%, #ff6b6b 50%, #ff8e53 100%)', 
+                  background: 'linear-gradient(90deg, var(--accent) 0%, #f77f3e 50%, #ff9d61 100%)', 
                   borderRadius: '8px',
                   transition: 'width 1s cubic-bezier(0.34, 1.56, 0.64, 1)',
                   position: 'relative',
                   overflow: 'hidden',
-                  boxShadow: '0 2px 6px rgba(222, 72, 58, 0.4)'
+                  boxShadow: '0 2px 6px rgba(242, 78, 7, 0.4)'
                 }}>
                   <div style={{
                     position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
@@ -220,7 +220,7 @@ export default function MyPage({ goal, count, targetReps = 100, stats, history, 
           <div style={{ 
             textAlign: 'center', 
             padding: '3rem 1.5rem',
-            background: 'linear-gradient(145deg, #ffffff 0%, #f4f4f4 100%)',
+            background: 'linear-gradient(145deg, var(--bg-primary) 0%, var(--bg-secondary) 100%)',
             borderRadius: '1.5rem',
             border: '2px dashed rgba(0,0,0,0.08)',
             boxShadow: 'inset 0 4px 10px rgba(0,0,0,0.02)'

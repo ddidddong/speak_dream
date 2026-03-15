@@ -11,14 +11,22 @@
   --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
   --font-brand: 'Ria', 'Jua', sans-serif;
   
+  /* Base Palette */
+  --color-oatmilk: #F9F5E6;
+  --color-coffee: #70271F;
+  --color-mango: #F24E07;
+  --color-icecube: #CCE5FF;
+  --color-cambodia: #264228;
+
+  /* Mapped Variables */
   --bg-primary: #ffffff;
-  --bg-secondary: #faf9f8;
-  --text-primary: #202020;
-  --text-secondary: #666666;
-  --accent: #de483a; /* Todoist Red */
-  --accent-light: #fbeae9;
-  --accent-hover: #c3392c;
-  --border: #eeeeee;
+  --bg-secondary: var(--color-oatmilk);
+  --text-primary: var(--color-coffee);
+  --text-secondary: var(--color-cambodia);
+  --accent: var(--color-mango); 
+  --accent-light: var(--color-icecube);
+  --accent-hover: #d33c05; /* slightly darker mango */
+  --border: rgba(112, 39, 31, 0.1); /* transparent coffee for borders */
   --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
   --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
   --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);

@@ -21,7 +21,7 @@ export default function LandingPage({ onStart }) {
             width: '100%', 
             height: 'auto', 
             borderRadius: 'var(--radius-lg)',
-            boxShadow: '0 20px 40px rgba(222, 72, 58, 0.1)'
+            boxShadow: '0 20px 40px rgba(242, 78, 7, 0.1)'
           }} 
         />
       </div>
@@ -57,7 +57,7 @@ export default function LandingPage({ onStart }) {
           maxWidth: '300px', 
           padding: '1.25rem',
           fontSize: '1.125rem',
-          boxShadow: '0 4px 14px 0 rgba(222, 72, 58, 0.39)',
+          boxShadow: '0 4px 14px 0 rgba(242, 78, 7, 0.39)',
           borderRadius: '2rem'
         }}
       >

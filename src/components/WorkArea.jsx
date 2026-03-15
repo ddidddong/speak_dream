@@ -176,7 +176,7 @@ export default function WorkArea({ goal, count, targetReps = 100, onIncrement, o
         background: 'linear-gradient(135deg, rgba(235, 76, 60, 0.05) 0%, rgba(255, 255, 255, 0.8) 100%)', 
         borderRadius: '1.25rem', 
         borderLeft: '4px solid var(--accent)',
-        boxShadow: '0 8px 32px rgba(222, 72, 58, 0.08), inset 0 2px 4px rgba(255,255,255,0.8)',
+        boxShadow: '0 8px 32px rgba(242, 78, 7, 0.08), inset 0 2px 4px rgba(255,255,255,0.8)',
         backdropFilter: 'blur(10px)',
         WebkitBackdropFilter: 'blur(10px)',
         overflow: 'hidden',
@@ -187,7 +187,7 @@ export default function WorkArea({ goal, count, targetReps = 100, onIncrement, o
         
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', position: 'relative', zIndex: 1 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.75rem' }}>
-            <span style={{ display:'block', width:'6px', height:'6px', borderRadius:'50%', backgroundColor:'var(--accent)', boxShadow:'0 0 8px rgba(222, 72, 58, 0.6)' }}></span>
+            <span style={{ display:'block', width:'6px', height:'6px', borderRadius:'50%', backgroundColor:'var(--accent)', boxShadow:'0 0 8px rgba(242, 78, 7, 0.6)' }}></span>
             <p style={{ fontSize: '0.8125rem', fontWeight: 700, color: 'var(--accent)', margin: 0, letterSpacing: '0.02em', textTransform: 'uppercase' }}>오늘의 목표</p>
           </div>
           <button 
@@ -233,7 +233,7 @@ export default function WorkArea({ goal, count, targetReps = 100, onIncrement, o
       <div style={{ 
         background: isRecording 
           ? 'linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.8)), url("https://images.unsplash.com/photo-1506744626753-14074211516e?auto=format&fit=crop&q=80&w=1000") center/cover no-repeat'
-          : '#ffffff',
+          : 'var(--bg-primary)',
         borderRadius: '1.5rem',
         padding: '2rem 1.5rem',
         border: isRecording ? '1px solid rgba(255,255,255,0.1)' : '1px solid rgba(0,0,0,0.06)',
@@ -257,12 +257,12 @@ export default function WorkArea({ goal, count, targetReps = 100, onIncrement, o
             style={{ 
               height: '100%', 
               width: `${progress}%`, 
-              background: 'linear-gradient(90deg, var(--accent) 0%, #ff6b6b 50%, #ff8e53 100%)', 
+              background: 'linear-gradient(90deg, var(--accent) 0%, #f77f3e 50%, #ff9d61 100%)', 
               borderRadius: '7px',
               transition: 'width 0.8s cubic-bezier(0.34, 1.56, 0.64, 1)',
               position: 'relative',
               overflow: 'hidden',
-              boxShadow: '0 2px 6px rgba(222, 72, 58, 0.4)'
+              boxShadow: '0 2px 6px rgba(242, 78, 7, 0.4)'
             }} 
           >
             <div style={{
@@ -322,15 +322,15 @@ export default function WorkArea({ goal, count, targetReps = 100, onIncrement, o
                 height: '88px',
                 borderRadius: '50%',
                 background: isRecording 
-                  ? 'linear-gradient(135deg, var(--accent) 0%, #ff5e5e 100%)' 
-                  : 'linear-gradient(135deg, #ffffff 0%, #f4f4f4 100%)',
+                  ? 'linear-gradient(135deg, var(--accent) 0%, #f77f3e 100%)' 
+                  : 'linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%)',
                 border: 'none',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 color: isRecording ? 'white' : 'var(--text-primary)',
                 boxShadow: isRecording 
-                  ? '0 12px 32px rgba(222, 72, 58, 0.4), inset 0 -4px 8px rgba(0,0,0,0.1)' 
+                  ? '0 12px 32px rgba(242, 78, 7, 0.4), inset 0 -4px 8px rgba(0,0,0,0.1)' 
                   : '0 8px 24px rgba(0,0,0,0.08), inset 0 2px 4px rgba(255,255,255,0.8), border 1px solid rgba(0,0,0,0.05)',
                 transition: 'all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)',
                 position: 'relative',
@@ -373,7 +373,7 @@ export default function WorkArea({ goal, count, targetReps = 100, onIncrement, o
                 padding: '1.25rem', 
                 borderRadius: '1rem', 
                 border: '2px solid rgba(0,0,0,0.04)', 
-                backgroundColor: '#faf9f8',
+                backgroundColor: 'var(--bg-secondary)',
                 fontSize: '1.0625rem',
                 outline: 'none',
                 textAlign: 'center',
@@ -382,8 +382,8 @@ export default function WorkArea({ goal, count, targetReps = 100, onIncrement, o
                 transition: 'all 0.2s ease',
                 boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.02)'
               }}
-              onFocus={(e) => { e.currentTarget.style.borderColor = 'var(--accent)'; e.currentTarget.style.backgroundColor = '#ffffff'; e.currentTarget.style.boxShadow = '0 0 0 4px rgba(222, 72, 58, 0.1)'; }}
-              onBlur={(e) => { e.currentTarget.style.borderColor = 'rgba(0,0,0,0.04)'; e.currentTarget.style.backgroundColor = '#faf9f8'; e.currentTarget.style.boxShadow = 'inset 0 2px 4px rgba(0,0,0,0.02)'; }}
+              onFocus={(e) => { e.currentTarget.style.borderColor = 'var(--accent)'; e.currentTarget.style.backgroundColor = 'var(--bg-primary)'; e.currentTarget.style.boxShadow = '0 0 0 4px rgba(242, 78, 7, 0.1)'; }}
+              onBlur={(e) => { e.currentTarget.style.borderColor = 'rgba(0,0,0,0.04)'; e.currentTarget.style.backgroundColor = 'var(--bg-secondary)'; e.currentTarget.style.boxShadow = 'inset 0 2px 4px rgba(0,0,0,0.02)'; }}
             />
           )}
         </div>
@@ -439,7 +439,7 @@ export default function WorkArea({ goal, count, targetReps = 100, onIncrement, o
                 alignItems: 'center',
                 gap: '0.375rem'
               }}
-              onMouseOver={(e) => { e.currentTarget.style.background = 'rgba(222, 72, 58, 0.1)'; e.currentTarget.style.color = 'var(--accent)'; }}
+              onMouseOver={(e) => { e.currentTarget.style.background = 'rgba(242, 78, 7, 0.1)'; e.currentTarget.style.color = 'var(--accent)'; }}
               onMouseOut={(e) => { e.currentTarget.style.background = 'rgba(0,0,0,0.04)'; e.currentTarget.style.color = 'var(--text-secondary)'; }}
             >
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path></svg>

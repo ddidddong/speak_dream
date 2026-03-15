@@ -105,7 +105,7 @@ export default function GoalGenerator({ onSave }) {
                 type="date" 
                 value={targetDate}
                 onChange={(e) => setTargetDate(e.target.value)}
-                style={{ width: '100%', padding: '0.75rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--border)', outline: 'none', backgroundColor: 'white' }}
+                style={{ width: '100%', padding: '0.75rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--border)', outline: 'none', backgroundColor: 'var(--bg-primary)' }}
               />
             </div>
             <div>
@@ -159,7 +159,7 @@ export default function GoalGenerator({ onSave }) {
                 padding: '0.6rem 0',
                 borderRadius: '0.5rem',
                 border: `2px solid ${targetReps === num && !isCustomMode ? 'var(--accent)' : 'var(--border)'}`,
-                backgroundColor: targetReps === num && !isCustomMode ? 'var(--accent-light)' : 'white',
+                backgroundColor: targetReps === num && !isCustomMode ? 'var(--accent-light)' : 'var(--bg-primary)',
                 color: targetReps === num && !isCustomMode ? 'var(--accent)' : 'var(--text-secondary)',
                 fontWeight: 700,
                 fontSize: '0.875rem',
@@ -178,7 +178,7 @@ export default function GoalGenerator({ onSave }) {
               padding: '0.6rem 0',
               borderRadius: '0.5rem',
               border: `2px solid ${isCustomMode ? 'var(--accent)' : 'var(--border)'}`,
-              backgroundColor: isCustomMode ? 'var(--accent-light)' : 'white',
+              backgroundColor: isCustomMode ? 'var(--accent-light)' : 'var(--bg-primary)',
               color: isCustomMode ? 'var(--accent)' : 'var(--text-secondary)',
               fontWeight: 700,
               fontSize: '0.875rem',
@@ -250,7 +250,7 @@ export default function GoalGenerator({ onSave }) {
           animation: 'fadeIn 0.2s ease-out'
         }}>
           <div style={{ 
-            background: 'white', 
+            background: 'var(--bg-primary)', 
             borderRadius: '1.5rem', 
             padding: '2rem', 
             maxWidth: '400px', 
