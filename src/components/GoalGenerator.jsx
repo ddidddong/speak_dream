@@ -9,7 +9,8 @@ export default function GoalGenerator({ onSave }) {
   const [targetReps, setTargetReps] = useState(100);
   const [customReps, setCustomReps] = useState('');
   const [isCustomMode, setIsCustomMode] = useState(false);
-  const presets = [21, 50, 100, 300];
+  const [showGuide, setShowGuide] = useState(false);
+  const presets = [100, 21, 50, 300];
 
   const formatDate = (dateStr) => {
     if (!dateStr) return '____년 __월 __일';
@@ -53,9 +54,32 @@ export default function GoalGenerator({ onSave }) {
   };
 
   return (
-    <div className="card">
+    <div className="card" style={{ position: 'relative' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-        <h2 style={{ fontSize: '1.25rem' }}>목표 문장 만들기</h2>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          <h2 style={{ fontSize: '1.25rem', margin: 0 }}>목표 문장 만들기</h2>
+          <button 
+            onClick={() => setShowGuide(true)}
+            style={{ 
+              background: 'var(--bg-secondary)', 
+              border: 'none', 
+              borderRadius: '50%', 
+              width: '24px', 
+              height: '24px', 
+              display: 'flex', 
+              alignItems: 'center', 
+              justifyContent: 'center', 
+              color: 'var(--text-secondary)',
+              cursor: 'pointer',
+              fontSize: '0.875rem',
+              fontWeight: 'bold',
+              boxShadow: '0 2px 4px rgba(0,0,0,0.05)'
+            }}
+            title="목표 작성 가이드"
+          >
+            ?
+          </button>
+        </div>
         <button 
           onClick={() => setIsFreeMode(!isFreeMode)}
           style={{ 
@@ -212,6 +236,58 @@ export default function GoalGenerator({ onSave }) {
           이 목표로 시작하기
         </button>
       </div>
+
+      {showGuide && (
+        <div style={{ 
+          position: 'fixed', 
+          top: 0, left: 0, right: 0, bottom: 0, 
+          backgroundColor: 'rgba(0,0,0,0.4)', 
+          backdropFilter: 'blur(4px)',
+          zIndex: 9999, 
+          display: 'flex', 
+          alignItems: 'center', 
+          justifyContent: 'center',
+          animation: 'fadeIn 0.2s ease-out'
+        }}>
+          <div style={{ 
+            background: 'white', 
+            borderRadius: '1.5rem', 
+            padding: '2rem', 
+            maxWidth: '400px', 
+            width: '90%', 
+            boxShadow: '0 20px 40px rgba(0,0,0,0.2)',
+            transform: 'translateY(0)',
+            position: 'relative'
+          }}>
+            <button 
+              onClick={() => setShowGuide(false)}
+              style={{ position: 'absolute', top: '1rem', right: '1rem', background: 'none', border: 'none', fontSize: '1.5rem', color: 'var(--text-secondary)', cursor: 'pointer' }}
+            >
+              &times;
+            </button>
+            <h3 style={{ fontSize: '1.25rem', marginBottom: '1rem', color: 'var(--accent)' }}>💡 목표 작성 가이드</h3>
+            <p style={{ marginBottom: '1rem', fontSize: '0.9375rem', lineHeight: 1.5 }}>
+              효과적인 각인을 위해 다음 공식을 따라 문장을 만들어보세요.
+            </p>
+            <div style={{ padding: '1rem', backgroundColor: 'var(--bg-secondary)', borderRadius: 'var(--radius-md)', border: '1px dashed var(--border)', marginBottom: '1rem' }}>
+              <p style={{ margin: 0, fontWeight: 700, fontSize: '1rem', color: 'var(--accent)' }}>
+                나는 + [날짜] + [목표] + [과거형 문장]
+              </p>
+            </div>
+            <p style={{ fontSize: '0.875rem', marginBottom: '2rem', color: 'var(--text-secondary)' }}>
+              예: "나는 2026년 12월 31일에 연수입 10억을 달성하였다."
+            </p>
+
+            <h3 style={{ fontSize: '1.125rem', marginBottom: '0.75rem' }}>🧠 왜 100번 반복해서 쓰는가?</h3>
+            <p style={{ fontSize: '0.9375rem', lineHeight: 1.5, marginBottom: '0.75rem' }}>
+              이 행동의 목적은 <strong>목표를 반복적으로 쓰고 읽으며 무의식에 목표를 각인</strong>하기 위함입니다.
+            </p>
+            <p style={{ fontSize: '0.9375rem', lineHeight: 1.5, color: 'var(--text-secondary)' }}>
+              반복은 뇌가 해당 목표를 매우 중요한 정보로 인식하게 만듭니다. 이를 통해 우리의 행동과 선택이 자연스럽게 목표 중심으로 변화하도록 돕는 강력한 심리적 도구입니다.
+            </p>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

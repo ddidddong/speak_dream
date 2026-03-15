@@ -111,7 +111,6 @@ function AppContent() {
                 onSaveGoal={setGoal}
               />
             )}
-            <Info />
             <footer style={{ marginTop: '2rem', padding: '2rem 0', textAlign: 'center', opacity: 0.5 }}>
               <p style={{ fontSize: '0.75rem' }}>© 2026 SpeakDream. Always keep going.</p>
             </footer>
