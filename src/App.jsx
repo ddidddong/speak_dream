@@ -3,7 +3,6 @@ import useGoalPersistence from './hooks/useGoalPersistence';
 import GoalGenerator from './components/GoalGenerator';
 import WorkArea from './components/WorkArea';
 import MyPage from './components/MyPage';
-import Info from './components/Info';
 import LandingPage from './components/LandingPage';
 import { AuthProvider, useAuth } from './context/AuthContext';
 
